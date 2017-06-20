@@ -61,4 +61,3 @@ const styles = StyleSheet.create({
     }
 })
 
-AppRegistry.registerComponent('cashloan', () => Root)
