@@ -3,7 +3,7 @@ import {Animated, StyleSheet, View, Text, AppRegistry} from 'react-native'
 import {NetInfoDecorator} from './src/common/HttpTools'
 import AppNavigator from './src/common/Navigation'
 @NetInfoDecorator
-export default class Root extends React.Component {
+class Root extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,7 +44,7 @@ export default class Root extends React.Component {
         )
     }
 }
-
+export default Root
 const styles = StyleSheet.create({
     netInfoView: {
         justifyContent: 'center',
