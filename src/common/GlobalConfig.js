@@ -1,5 +1,4 @@
 import {Dimensions} from 'react-native'
-import {Constants} from 'expo'
 const BaseUrl = 'http://test.cashpp.com'
 const ClientWidth = Dimensions.get('window').width
 const CommonPageStyle = {

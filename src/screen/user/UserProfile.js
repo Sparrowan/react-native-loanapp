@@ -30,7 +30,7 @@ export default class UserProfile extends Component {
                     <Text style={styles.title}>{"安全设置"}</Text>
                     <Item name="身份认证" subName="未认证"/>
                     <Item name="手机认证" subName="未认证"/>
-                    <Item name="亲友认证" subName="未认证" onPress={()=>navigate('Relation')}/>
+                    <Item name="紧急联系人" subName="未认证" onPress={()=>navigate('Relation')}/>
                     <Item name="立即拿钱" onPress={()=>navigate('LoanApply')}/>
                     <Item name="注册" onPress={()=>navigate('UserRegister')}/>
                 </ScrollView>
