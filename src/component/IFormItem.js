@@ -14,7 +14,7 @@ class IFormItem extends Component{
         switch (type.name){
             case 'input':
                     content = <View style={[styles.formItem,type.formItemStyle]}>
-                        <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+                        <View style={{flex:1,alignItems:'center',flexDirection:'row',justifyContent:'center'}}>
                             {type.icon?<Icon name={type.icon.name||'phone'} size={type.icon.size||18} color={type.icon.color||'#4da6f0'}/>:<Text>{type.inputProps.title}</Text>}
                         </View>
                         <View style={{marginLeft:5,flex:3}}>
@@ -42,7 +42,7 @@ class IFormItem extends Component{
                 break;
             case 'vcode':
                 content = <View style={[styles.formItem,type.formItemStyle]}>
-                    <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+                    <View style={{flex:1,alignItems:'center',flexDirection:'row',justifyContent:'center'}}>
                         {type.icon?<Icon name={type.icon.name||'phone'} size={type.icon.size||18} color={type.icon.color||'#4da6f0'}/>:<Text>{type.inputProps.title}</Text>}
                     </View>
                     <View style={{marginLeft:5,flex:2}}>
@@ -131,6 +131,9 @@ const createForm = function (form) {
                         formValidate = false
                         break;
                     }else if(!newForm[name].value){
+                        formValidate = false
+                        break;
+                    }else if(Array.isArray(newForm[name].value)&&newForm[name].value.length===0){
                         formValidate = false
                         break;
                     }

@@ -5,7 +5,7 @@ class Relation{
         family:{
             data:[{label:'父亲',value:'父亲'},{label:'母亲',value:'母亲'}],
             hasError:false,
-            value:['父亲'],
+            value:[],
             rules:[{pattern:(val)=>!validator.isEmpty(val[0]),errMsg:'请选择家庭联系人'}]
         },
         familyPhone:{
@@ -25,7 +25,7 @@ class Relation{
         friend:{
             data:[{label:'同事',value:'同事'},{label:'室友',value:'室友'}],
             hasError:false,
-            value:['同事'],
+            value:[],
             rules:[{pattern:(val)=>!validator.isEmpty(val[0]),errMsg:'请选择家庭联系人'}]
         },
         friendPhone:{

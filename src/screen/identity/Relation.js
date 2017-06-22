@@ -16,9 +16,9 @@ class Relation extends React.Component{
                 leftIcon='angle-left'
                 leftPress={()=>goBack()}
             />
-            <Text style={styles.title}>{"家庭联系人"}</Text>
+            <Text style={styles.title}>{"亲属关系"}</Text>
             <IFormItem
-                type={{name:'picker',pickerProps:{title:'选择家庭联系人',cols:1}}}
+                type={{name:'picker',pickerProps:{title:'关系',cols:1}}}
                 formFiled={getFormFieldProps('family')}
             />
             <IFormItem
@@ -29,9 +29,9 @@ class Relation extends React.Component{
                 type={{name:'input',inputProps:{type:'phone',placeholder:'请输入手机号',title:'手机号'},icon:{name:'phone'}}}
                 formFiled={getFormFieldProps('familyPhone')}
             />
-            <Text style={styles.title}>{"朋友"}</Text>
+            <Text style={styles.title}>{"社会关系"}</Text>
             <IFormItem
-                type={{name:'picker',pickerProps:{title:'选择朋友',cols:1}}}
+                type={{name:'picker',pickerProps:{title:'关系',cols:1}}}
                 formFiled={getFormFieldProps('friend')}
             />
             <IFormItem

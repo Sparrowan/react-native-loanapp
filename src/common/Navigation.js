@@ -6,6 +6,7 @@ import User from '../screen/User'
 import {RegisterProtocol} from '../screen/webView/WebView'
 import Avator from '../screen/identity/Avator'
 import Relation from '../screen/identity/Relation'
+import Personal from '../screen/identity/PersonalInformation'
 export default  SimpleApp = StackNavigator({
     LoanApply:{
         screen:LoanApply
@@ -24,6 +25,9 @@ export default  SimpleApp = StackNavigator({
     },
     Relation:{
         screen:Relation
+    },
+    Personal:{
+        screen:Personal
     }
 },{
     headerMode:'none'
