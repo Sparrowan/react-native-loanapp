@@ -1,8 +1,10 @@
 import React from 'react';
-import { Button, Image, View } from 'react-native';
+import { Button, Image, View,Text,StyleSheet} from 'react-native';
 import { ImagePicker } from 'expo';
 import {NavBar} from '../../component/index'
-export default class ImagePickerExample extends React.Component {
+import store from '../../store/index'
+import {IFormItem,createForm} from '../../component/IFormItem'
+class Avatar extends React.Component {
     state = {
         image: null,
     };
@@ -10,6 +12,7 @@ export default class ImagePickerExample extends React.Component {
     render() {
         let { image } = this.state;
         const {goBack,navigate} = this.props.navigation
+        const {getFormFieldProps,formValidate} = this.props.form
         return (
             <View style={{flex: 1, backgroundColor: "#f3f3f3"}}>
                 <NavBar
@@ -17,6 +20,16 @@ export default class ImagePickerExample extends React.Component {
                     leftIcon="angle-left"
                     leftPress={()=>goBack()}
                 />
+                <Text style={styles.title}>{"居住信息"}</Text>
+                <IFormItem
+                    type={{formItemStyle:{padding:0},name:'input',inputProps:{title:'姓名',placeholder:'请输入您的姓名'}}}
+                    formFiled={getFormFieldProps('name')}
+                />
+                <IFormItem
+                    type={{formItemStyle:{padding:0},name:'input',inputProps:{title:'身份证',placeholder:'请输入您的身份证'}}}
+                    formFiled={getFormFieldProps('idCard')}
+                />
+
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Button
                         title="Pick an image from camera roll"
@@ -42,3 +55,11 @@ export default class ImagePickerExample extends React.Component {
         }
     };
 }
+const styles = StyleSheet.create({
+    title: {
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        color: "#666"
+    },
+})
+export default createForm(store.personal.init().form)(Avatar)

@@ -20,7 +20,7 @@ export default class UserProfile extends Component {
                     title="账户信息"
                 />
                 <ScrollView>
-                    <Item name="头像" avatar={2} first={true} onPress={()=>navigate('Avator')}/>
+                    <Item name="头像" avatar={2} first={true} onPress={()=>navigate('avatar')}/>
                     <Item name="用户名" disable={true} subName="_平行时空"/>
                     <Text style={styles.title}>{"账号绑定"}</Text>
                     <Item name="手机"  icon="mobile" subName="135****0418"/>

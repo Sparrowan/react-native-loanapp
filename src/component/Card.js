@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {observer} from 'mobx-react'
-import {AppRegistry,StyleSheet,View,Image,Animated,Text} from 'react-native'
+import {AppRegistry,StyleSheet,View,Image,Animated,Text,Dimensions} from 'react-native'
 @observer
 class Card extends Component {
     render() {
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     },
     img:{
         height: 175,
-        width: 356,
+        width: Dimensions.get('window').width-20,
         borderRadius: 8,
     },
     quota:{

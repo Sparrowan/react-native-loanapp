@@ -4,7 +4,7 @@ import {UserSetting} from '../screen/user/UserSetting'
 import LoanApply from '../screen/loan/LoanApply'
 import User from '../screen/User'
 import {RegisterProtocol} from '../screen/webView/WebView'
-import Avator from '../screen/identity/Avator'
+import avatar from '../screen/identity/Avatar'
 import Relation from '../screen/identity/Relation'
 import Personal from '../screen/identity/PersonalInformation'
 export default  SimpleApp = StackNavigator({
@@ -20,8 +20,8 @@ export default  SimpleApp = StackNavigator({
     RegisterProtocol:{
         screen:RegisterProtocol
     },
-    Avator:{
-        screen:Avator
+    avatar:{
+        screen:avatar
     },
     Relation:{
         screen:Relation

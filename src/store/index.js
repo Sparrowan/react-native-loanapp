@@ -3,8 +3,9 @@ import app from './app'
 import home from './home'
 import relation from './relation'
 import personal from './personal'
+import avatar from './avatar'
 const store ={
-    app,home,relation,personal
+    app,home,relation,personal,avatar
 }
 export default store
 //用于存储对应的store的wrapper组件

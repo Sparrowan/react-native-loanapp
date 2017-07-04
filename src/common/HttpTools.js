@@ -79,5 +79,31 @@ const post = ({url,data={},timeout}) => {
         return Promise.race([fetchPromise,delay(timeout)])
     }
 }
-
-export { get,post,NetInfoDecorator}
+const upload = function({url,data={},timeout}){
+    const {file,img} = data
+    let uploadData = new FormData();
+    uploadData.append('file', file.nativeFile)
+    uploadData.append('type', img[0].type)
+    const fetchPromise = new Promise((resolve,reject)=>{
+        fetch(BaseUrl+url,{
+            method: 'POST',
+            body: uploadData
+        }).then((response)=>{
+            if(response.ok){
+                return response.json()
+            }else {
+                reject(response)
+            }
+        }).then((response)=>{
+            resolve(response)
+        }).catch(()=>{
+            reject(defaultErr)
+        })
+    })
+    if(timeout===undefined){
+        return fetchPromise
+    }else {
+        return Promise.race([fetchPromise,delay(timeout)])
+    }
+}
+export { get,post,NetInfoDecorator,upload}
