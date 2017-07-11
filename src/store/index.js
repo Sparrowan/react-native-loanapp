@@ -1,11 +1,12 @@
 import React,{Component} from 'react'
 import app from './app'
 import home from './home'
+import user from './user'
 import relation from './relation'
 import personal from './personal'
 import avatar from './avatar'
 const store ={
-    app,home,relation,personal,avatar
+    app,home,relation,personal,avatar,user
 }
 export default store
 //用于存储对应的store的wrapper组件

@@ -44,6 +44,7 @@ export default class Item extends Component {
         icon: PropTypes.string, //头部图标
         name: PropTypes.string.isRequired,//标题
         subName: PropTypes.any, //副标题(尾部)
+        subNameColor:PropTypes.string, //副标题颜色
         color: PropTypes.string, //图标颜色
         first: PropTypes.bool, //是否是第一个item
         avatar: PropTypes.number, //头像
@@ -53,7 +54,7 @@ export default class Item extends Component {
         onPress: PropTypes.func //点击事件
     }
     _render(){
-        let {icon, iconSize, name, subName, color, first, avatar, disable, font} = this.props
+        let {icon, iconSize, name, subName, color, first, avatar, disable, font,subNameColor} = this.props
         font = font||"FontAwesome"
         const Icon = Font[font]
         return (
@@ -62,7 +63,7 @@ export default class Item extends Component {
                 <View style={[styles.listInfo, {borderTopWidth: !first?1:0}]}>
                     <View style={{flex: 1}}><Text>{name}</Text></View>
                     <View style={styles.listInfoRight}>
-                        {subName?(<Text style={{color: "#aaa", fontSize:12}}>{subName}</Text>):null}
+                        {subName?(<Text style={{color: subNameColor||"#aaa", fontSize:12}}>{subName}</Text>):null}
                         {avatar?(<Image source={avatar} style={{width: 36, height: 36, resizeMode: "cover", overflow:"hidden", borderRadius: 18}}/>):null}
                         {disable?null:(<Font.FontAwesome style={{marginLeft: 10}} name="angle-right" size={18} color="#bbb" />)}
                     </View>

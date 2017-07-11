@@ -4,9 +4,10 @@ import {inject} from '../../store/index'
 import validator from 'validator';
 import { StyleSheet, Text, View,Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import {NavBar,VCode} from '../../component/index'
+import {NavBar,VCode,VCodeImg} from '../../component/index'
 import {InputItem,Button,Toast} from 'antd-mobile'
 import {TouchableOpacity} from 'react-native'
+import {cleanString} from '../../common/Tools'
 class RegisterForm extends Component{
     state = {
         form:{
@@ -21,14 +22,14 @@ class RegisterForm extends Component{
                 hasError:false,
                 value:'',
                 rules:[
-                    {pattern:(val)=>val.replace(/\s/g,'').trim().length===4,errMsg:'请输入4位验证码'}
+                    {pattern:(val)=>val.replace(/\s/g,'').trim().length===4,errMsg:'请输入4位短信验证码'}
                 ]
             },
             password:{
                 hasError:false,
                 value:'',
                 rules:[
-                    {pattern:(val)=>!validator.isEmpty(val),errMsg:'请输入密码'}
+                    {pattern:(val)=>!validator.isEmpty(val),errMsg:'请输入图片验证码'}
                 ]
             },
             protocol:{
@@ -82,17 +83,39 @@ class RegisterForm extends Component{
     }
     _submit(){
         if(this.state.formValidate){
+            let phone = this.state.form.phone
+            let code = this.state.form.vcode
             //提交注册
-            Toast.info(this.state.form.password.value)
+            this.props.user.userLogin({
+                phone:phone.value,
+                code:code.value
+            },()=>{
+                this.props.navigation.goBack()
+            })
         }
     }
     _sendValidate(starter){
+        let phone = this.state.form.phone
+        let imgCode = this.state.form.password
+        if(phone.value===''||phone.hasError){
+            Toast.info('请输入正确的手机号码')
+        }else {
+            //获取验证码
+            this.props.user.userGetVCode({
+                type:0,
+                phone:cleanString(phone.value),
+                code:imgCode.value
+            })
+            starter()
+        }
+    }
+    _getValidateImg(imgByPhone){
         let phone = this.state.form.phone
         if(phone.value===''||phone.hasError){
             Toast.info('请输入正确的手机号码')
         }else {
             //获取验证码
-            starter()
+            imgByPhone(cleanString(phone.value))
         }
     }
     render(){
@@ -126,27 +149,27 @@ class RegisterForm extends Component{
                     <View style={{marginLeft:5,flex:1}}>
                         <InputItem
                             maxLength={4}
-                            placeholder="请输入4位验证码"
+                            placeholder="请输入短信验证码"
                             error={this._getFormFieldHasError('vcode')}
                             onErrorClick={()=>this._onErrorClick('vcode')}
                             onChange={(val)=>this._onFormFieldChange('vcode',val)}
                             value={this._getFormFieldValue('vcode')}
                         />
                     </View>
-                    <VCode style={styles.vcode} textStyle={{fontSize:18,color:'#fff'}} onSend={this._sendValidate.bind(this)} countDown={10}/>
+                    <VCode style={styles.vcode} textStyle={{fontSize:12,color:'#fff'}} onSend={this._sendValidate.bind(this)} countDown={60}/>
                 </View>
                 <View style={styles.formItem}>
                     <Icon name="id-card" size={25} color="#4da6f0"/>
                     <View style={{marginLeft:5,flex:1}}>
                         <InputItem
-                            type="password"
-                            placeholder="请输入密码"
+                            placeholder="请输入图片验证码"
                             error={this._getFormFieldHasError('password')}
                             onErrorClick={()=>this._onErrorClick('password')}
                             onChange={(val)=>this._onFormFieldChange('password',val)}
                             value={this._getFormFieldValue('password')}
                         />
                     </View>
+                    <VCodeImg style={styles.vcode} textStyle={{fontSize:12,color:'#fff'}} onSend={this._getValidateImg.bind(this)}/>
                 </View>
                 <View style={styles.protocol}>
                     <TouchableOpacity style={styles.proRadio} onPress={()=>this._onFormFieldChange('protocol',!this.state.form.protocol.value)}>
@@ -187,13 +210,11 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         backgroundColor:'#fff',
-        borderRadius:10
     },
     vcode:{
         position:'absolute',
-        right:20,
-        top:0,
-        backgroundColor:'#4da6f0'
+        right:10,
+        top:2,
     },
     protocol:{
         marginVertical:10,

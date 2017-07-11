@@ -35,7 +35,7 @@ export const RefreshStatus={
     refreshing:2
 }
 
-import dateFormat from '../common/Tools'
+import {dateFormat} from '../common/Tools'
 /**
  * ======================================SwRefreshScrollView===================================
  */

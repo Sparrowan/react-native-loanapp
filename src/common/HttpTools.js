@@ -21,7 +21,7 @@ const NetInfoDecorator = WrappedComponent => class extends Component {
 }
 const delay = timeout => {
     return new Promise((resolve, reject) => {
-        setTimeout(() => reject('请求超时'), timeout * 1000)
+        setTimeout(() => reject({status:-1,statusText:'请求超时'}), timeout * 1000)
     })
 }
 const defaultErr = {status:0,statusText:'网络异常'}

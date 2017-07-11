@@ -4,7 +4,7 @@
  * @param fmt
  * @returns {*|string}
  */
-export default dateFormat = function(dateTime, fmt) {
+const dateFormat = function(dateTime, fmt) {
     var date = new Date(dateTime);
     fmt = fmt || 'yyyy-MM-dd';
     var o = {
@@ -20,4 +20,12 @@ export default dateFormat = function(dateTime, fmt) {
     for (var k in o)
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
+}
+const cleanString = function (str) {
+    if(str&&(typeof str==='string')&&str.length>0){
+        return str.replace(/\s/g,'').trim()
+    }
+}
+export {
+    dateFormat,cleanString
 }

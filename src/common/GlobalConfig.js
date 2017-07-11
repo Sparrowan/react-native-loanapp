@@ -1,5 +1,5 @@
 import {Dimensions} from 'react-native'
-const BaseUrl = 'http://test.cashpp.com'
+const BaseUrl = 'http://test.cashpp.com/rest'
 const ClientWidth = Dimensions.get('window').width
 const CommonPageStyle = {
     flex: 1,

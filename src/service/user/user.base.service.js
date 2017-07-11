@@ -1,1 +1,48 @@
 import {get,post} from '../../common/HttpTools'
+const login = function (data) { //登录注册(一步)
+    return post({
+        url:'/user/public/login',
+        data:data
+    })
+}
+const getValidateCode = function (params) { //获取短信验证码
+    return get({
+        url:'/user/public/sms',
+        params:params
+    })
+}
+const getUserDetail = function () { //获取个人信息
+    return get({
+        url:'/user/info/cert'
+    })
+}
+const getUserCertStatus = function () { //获取个人验证信息
+    return get({
+        url:'/user/info/certStatus'
+    })
+}
+const getUserBindBankCard = function () { //获取个人绑定银行卡信息
+    return get({
+        url:'/user/info/bindBankCard'
+    })
+}
+const submitUserDetail = function (data) { //提交个人信息
+    return post({
+        url:'/user/info/detail/basic',
+        data:data
+    })
+}
+const submitUserContact = function (data) { //提交紧急联系人
+    return post({
+        url:'/user/into/detail/relationship',
+        data:data
+    })
+}
+const submitCert = function (data) { //提交审核
+    return post({
+        url:'/user/info/certSumbit'
+    })
+}
+export {
+    login,getValidateCode,getUserCertStatus,getUserDetail,submitUserContact,submitUserDetail,getUserBindBankCard
+}

@@ -6,8 +6,8 @@ import {IPickerItem} from './IPicker'
 import Item from './Item'
 import NavBar from './NavBar'
 import {PopupContent} from './ApplyPopup'
-import {VCode} from './VCode'
+import {VCode,VCodeImg} from './VCode'
 import {IFormItem,createForm} from './IFormItem'
 export {
-    Item,IPickerItem,NavBar,IRefreshListView,IRefreshScrollView,IButton,ICard,PopupContent,VCode,createForm,IFormItem
+    Item,IPickerItem,NavBar,IRefreshListView,IRefreshScrollView,IButton,ICard,PopupContent,VCode,createForm,IFormItem,VCodeImg
 }
