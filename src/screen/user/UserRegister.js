@@ -22,7 +22,7 @@ class RegisterForm extends Component{
                 hasError:false,
                 value:'',
                 rules:[
-                    {pattern:(val)=>val.replace(/\s/g,'').trim().length===4,errMsg:'请输入4位短信验证码'}
+                    {pattern:(val)=>!validator.isEmpty(val),errMsg:'请输入短信验证码'}
                 ]
             },
             password:{
@@ -99,14 +99,18 @@ class RegisterForm extends Component{
         let imgCode = this.state.form.password
         if(phone.value===''||phone.hasError){
             Toast.info('请输入正确的手机号码')
+        }else if(imgCode.value===''||imgCode.hasError){
+            Toast.info('请输入图片验证码')
         }else {
             //获取验证码
             this.props.user.userGetVCode({
                 type:0,
                 phone:cleanString(phone.value),
                 code:imgCode.value
+            },()=>{
+                starter()
             })
-            starter()
+
         }
     }
     _getValidateImg(imgByPhone){
@@ -136,6 +140,7 @@ class RegisterForm extends Component{
                     <View style={{marginLeft:5,flex:1}}>
                         <InputItem
                             type="phone"
+                            style={{borderBottomColor:'#fff'}}
                             placeholder="请输入你的手机号"
                             error={this._getFormFieldHasError('phone')}
                             onErrorClick={()=>this._onErrorClick('phone')}
@@ -144,24 +149,11 @@ class RegisterForm extends Component{
                         />
                     </View>
                 </View>
-                <View style={[styles.formItem]}>
-                    <Icon name="send" size={25} color="#4da6f0"/>
-                    <View style={{marginLeft:5,flex:1}}>
-                        <InputItem
-                            maxLength={4}
-                            placeholder="请输入短信验证码"
-                            error={this._getFormFieldHasError('vcode')}
-                            onErrorClick={()=>this._onErrorClick('vcode')}
-                            onChange={(val)=>this._onFormFieldChange('vcode',val)}
-                            value={this._getFormFieldValue('vcode')}
-                        />
-                    </View>
-                    <VCode style={styles.vcode} textStyle={{fontSize:12,color:'#fff'}} onSend={this._sendValidate.bind(this)} countDown={60}/>
-                </View>
                 <View style={styles.formItem}>
                     <Icon name="id-card" size={25} color="#4da6f0"/>
                     <View style={{marginLeft:5,flex:1}}>
                         <InputItem
+                            style={{borderBottomColor:'#fff'}}
                             placeholder="请输入图片验证码"
                             error={this._getFormFieldHasError('password')}
                             onErrorClick={()=>this._onErrorClick('password')}
@@ -170,6 +162,20 @@ class RegisterForm extends Component{
                         />
                     </View>
                     <VCodeImg style={styles.vcode} textStyle={{fontSize:12,color:'#fff'}} onSend={this._getValidateImg.bind(this)}/>
+                </View>
+                <View style={[styles.formItem]}>
+                    <Icon name="send" size={25} color="#4da6f0"/>
+                    <View style={{marginLeft:5,flex:1}}>
+                        <InputItem
+                            style={{borderBottomColor:'#fff'}}
+                            placeholder="请输入短信验证码"
+                            error={this._getFormFieldHasError('vcode')}
+                            onErrorClick={()=>this._onErrorClick('vcode')}
+                            onChange={(val)=>this._onFormFieldChange('vcode',val)}
+                            value={this._getFormFieldValue('vcode')}
+                        />
+                    </View>
+                    <VCode style={styles.vcode} textStyle={{fontSize:12,color:'#fff'}} onSend={this._sendValidate.bind(this)} countDown={60}/>
                 </View>
                 <View style={styles.protocol}>
                     <TouchableOpacity style={styles.proRadio} onPress={()=>this._onFormFieldChange('protocol',!this.state.form.protocol.value)}>

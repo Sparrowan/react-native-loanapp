@@ -19,6 +19,7 @@ class IFormItem extends Component{
                         </View>
                         <View style={{marginLeft:5,flex:3}}>
                             <InputItem
+                                style={{borderBottomColor:'#fff'}}
                                 {...type.inputProps}
                                 error={formFiled.error}
                                 onErrorClick={formFiled.onErrorClick}
@@ -47,6 +48,7 @@ class IFormItem extends Component{
                     </View>
                     <View style={{marginLeft:5,flex:2}}>
                         <InputItem
+                            style={{borderBottomColor:'#fff'}}
                             {...type.inputProps}
                             error={formFiled.error}
                             onErrorClick={formFiled.onErrorClick}

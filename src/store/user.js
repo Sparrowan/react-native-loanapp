@@ -1,5 +1,6 @@
 import {observable, action,reaction,runInAction} from 'mobx'
 import {login,getValidateCode} from '../service/user/user.base.service'
+import {Toast} from 'antd-mobile'
 class User{
     async userLogin(data,callback){
         const result = await login(data);
@@ -15,6 +16,8 @@ class User{
             if(callback){
                 callback()
             }
+        }else {
+            Toast.info(result.result)
         }
     }
 }

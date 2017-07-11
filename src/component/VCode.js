@@ -73,8 +73,7 @@ class VCodeImg extends Component{
         return this.state.type==='text'?<Button style={[styles.vcode,style]}   onClick={this._onClick}>
             <Text style={[styles.text,textStyle]}>{this.state.value}</Text>
         </Button>:<View style={[styles.imgCode,style]}>
-            <Image source={{uri:this.state.imgUrl}} style={{width:150,height:40}} resizeMode={Image.resizeMode.contain}/>
-            {/*<Text style={{position:'absolute',top:0,right:0}}>{this.state.imgUrl}</Text>*/}
+            <Image source={{uri:this.state.imgUrl}} style={{width:124,height:40}} resizeMode={Image.resizeMode.contain}/>
         </View>
 
     }
@@ -83,7 +82,7 @@ class VCodeImg extends Component{
     }
     _getInternetImg(phone){
         this.setState({
-            imgUrl:BaseUrl+ '/rest/user/public/verifyCode?phone=' + phone + '&time=' + Date.now(),
+            imgUrl:BaseUrl+ '/user/public/verifyCode?phone=' + phone + '&time=' + Date.now(),
             type:'img'
         })
     }
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     imgCode:{
-        width:150,
+        width:124,
         height:40,
         paddingHorizontal:10,
         paddingVertical:5,
