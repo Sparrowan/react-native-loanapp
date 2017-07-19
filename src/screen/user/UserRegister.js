@@ -128,7 +128,7 @@ class RegisterForm extends Component{
             <NavBar
                 title="注册"
                 rightIcon='times'
-                rightPress={()=>this.props.app.hideLoginView()}
+                rightPress={()=>goBack()}
                 rightIconSize={18}
             />
             <View>

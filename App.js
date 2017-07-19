@@ -1,5 +1,5 @@
 import React from 'react'
-import {Animated, StyleSheet, View, Text, AppRegistry,} from 'react-native'
+import {Animated, StyleSheet, View, Text,} from 'react-native'
 import {NetInfoDecorator} from './src/common/HttpTools'
 import AppNavigator from './src/common/Navigation'
 @NetInfoDecorator

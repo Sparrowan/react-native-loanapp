@@ -1,8 +1,6 @@
 import {BaseUrl} from './GlobalConfig'
 import React, {Component} from 'react'
-import {NetInfo,AsyncStorage} from 'react-native'
-import store from '../store/index'
-const APP = store.app;
+import {NetInfo,AsyncStorage,DeviceEventEmitter} from 'react-native'
 const NetInfoDecorator = WrappedComponent => class extends Component {
     constructor(props) {
         super(props)
@@ -32,7 +30,7 @@ const successHandler = function (response) {
 }
 const errorHandler = function (response) {
     if(response.status===401||response.status===403){ //登陆失效
-        APP.showLoginView();
+        DeviceEventEmitter.emit('needLogin')
     }
     return response
 }

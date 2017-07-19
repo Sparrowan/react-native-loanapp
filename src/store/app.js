@@ -1,9 +1,6 @@
 import React from 'react'
 import {observable, action} from 'mobx'
 import {Modal,Toast,Popup} from 'antd-mobile'
-import {View} from 'react-native'
-import {CLIENTHEIGHT,CLIENTWIDTH} from '../common/GlobalConfig'
-import {UserRegister} from '../screen/user/UserRegister'
 const alert = Modal.alert;
 class App {
     @observable barStyle = 'light-content'
@@ -30,24 +27,6 @@ class App {
                 break;
             default:Toast.info(content,duration,onClose,mask)
                 break;
-        }
-    }
-    @action
-    showLoginView(){
-        if(!this.loginViewShow){
-            Popup.show(<View style={{width:CLIENTWIDTH,height:CLIENTHEIGHT}}>
-                <UserRegister/>
-            </View>, {
-                animationType: 'slide-up'
-            });
-            this.loginViewShow = true;
-        }
-    }
-    @action
-    hideLoginView(){
-        if(this.loginViewShow){
-            Popup.hide();
-            this.loginViewShow = false;
         }
     }
 }

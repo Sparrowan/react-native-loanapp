@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {observer} from 'mobx-react'
 import {inject} from '../../store/index'
 import {StyleSheet, Image, View, AppRegistry, Animated, Dimensions, Text, Easing} from 'react-native';
-import {Button, Popup, Picker} from 'antd-mobile';
+import {Button, Popup,} from 'antd-mobile';
 import {IRefreshScrollView, ICard, NavBar, PopupContent} from '../../component/index'
 @inject('home')
 @observer
