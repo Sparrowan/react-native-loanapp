@@ -5,7 +5,7 @@ import user from './user'
 import relation from './relation'
 import personal from './personal'
 import avatar from './avatar'
-const store ={
+const store = {
     app,home,relation,personal,avatar,user
 }
 export default store
@@ -16,6 +16,9 @@ export function inject(...storeNames){
         if(storeNames.length===0){//无参默认全部注入
             stores = {...store}
         }else {
+            if(!storeNames.includes('app')){ //默认都会注入app
+                storeNames.push('app')
+            }
             for(let name of storeNames){
                 if({}.hasOwnProperty.call(store,name)){
                     stores[name] = store[name]
@@ -35,3 +38,4 @@ export function inject(...storeNames){
         return StoreContainer
     }
 }
+

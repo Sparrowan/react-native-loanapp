@@ -7,10 +7,15 @@ import {
 } from 'react-native'
 import NavBar from '../../component/NavBar'
 import Item from '../../component/Item'
+import {inject} from '../../store/index'
+import {observer} from 'mobx-react'
 //FontAwesome
-export default class UserProfile extends Component {
+class UserProfile extends Component {
     constructor(props){
         super(props)
+    }
+    componentDidMount(){
+        this.props.user.getUserCert()
     }
     render(){
         const {navigate} = this.props.navigation
@@ -31,13 +36,14 @@ export default class UserProfile extends Component {
                     <Item name="个人信息" subName="未认证" subNameColor={'red'} onPress={()=>navigate('Personal')}/>
                     <Item name="手机认证" subName="未认证"/>
                     <Item name="紧急联系人" subName="未认证" onPress={()=>navigate('Relation')}/>
-                    <Item name="立即拿钱" onPress={()=>navigate('LoanApply')}/>
+                    <Item name="立即拿钱" onPress={()=>navigate('LoanApply',{from:'UserProfile'})}/>
                     <Item name="注册" onPress={()=>navigate('UserRegister')}/>
                 </ScrollView>
             </View>
         )
     }
 }
+export default inject('user')(observer(UserProfile))
 const styles = StyleSheet.create({
     title: {
         paddingHorizontal: 16,

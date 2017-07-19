@@ -1,6 +1,8 @@
 import {BaseUrl} from './GlobalConfig'
 import React, {Component} from 'react'
-import {NetInfo} from 'react-native'
+import {NetInfo,AsyncStorage} from 'react-native'
+import store from '../store/index'
+const APP = store.app;
 const NetInfoDecorator = WrappedComponent => class extends Component {
     constructor(props) {
         super(props)
@@ -25,6 +27,15 @@ const delay = timeout => {
     })
 }
 const defaultErr = {status:0,statusText:'网络异常'}
+const successHandler = function (response) {
+    return response
+}
+const errorHandler = function (response) {
+    if(response.status===401||response.status===403){ //登陆失效
+        APP.showLoginView();
+    }
+    return response
+}
 const get = ({url, params = {}, timeout}) => {
     const paramArr = []
     if (Object.keys(params).length !== 0) {
@@ -38,7 +49,7 @@ const get = ({url, params = {}, timeout}) => {
             if(response.ok){
                 return response.json()
             }else {
-                reject(response)
+                reject(errorHandler(response))
             }
         }).then((response)=>{
             resolve(response)
@@ -65,7 +76,7 @@ const post = ({url,data={},timeout}) => {
             if(response.ok){
                 return response.json()
             }else {
-                reject(response)
+                reject(errorHandler(response))
             }
         }).then((response)=>{
             resolve(response)
@@ -92,7 +103,7 @@ const upload = function({url,data={},timeout}){
             if(response.ok){
                 return response.json()
             }else {
-                reject(response)
+                reject(errorHandler(response))
             }
         }).then((response)=>{
             resolve(response)

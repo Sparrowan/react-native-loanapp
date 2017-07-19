@@ -42,7 +42,9 @@ class Home{
                 }
             )
         }catch (err){
-            end()
+            if(end){
+                end()
+            }
         }
     }
     @action
@@ -50,11 +52,10 @@ class Home{
         if(!this.validate()) {
             return;
         }
-        // let data =  await applyLoan(this.applyData)
-        // if(data.msg==='ok'){
-        //     success()
-        // }
-        setTimeout(()=>success(),1000)
+        let response =  await applyLoan(this.applyData)
+        if(response.result.msg==='ok'){
+                success()
+        }
     }
     validate() {
         if(this.applyData.amount && this.applyData.day) {

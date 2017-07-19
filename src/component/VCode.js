@@ -1,7 +1,7 @@
 import React,{Component,PropTypes} from 'react'
 import {inject} from '../store/index'
 import {BaseUrl} from '../common/GlobalConfig'
-import {StyleSheet,Text,Image,View} from 'react-native'
+import {StyleSheet,Text,Image,View,TouchableOpacity} from 'react-native'
 import {Button} from 'antd-mobile'
 @inject('user')
 class VCode extends Component{
@@ -73,7 +73,9 @@ class VCodeImg extends Component{
         return this.state.type==='text'?<Button style={[styles.vcode,style]}   onClick={this._onClick}>
             <Text style={[styles.text,textStyle]}>{this.state.value}</Text>
         </Button>:<View style={[styles.imgCode,style]}>
-            <Image source={{uri:this.state.imgUrl}} style={{width:124,height:40}} resizeMode={Image.resizeMode.contain}/>
+            <TouchableOpacity onPress={this._onClick}>
+                <Image source={{uri:this.state.imgUrl}} style={{width:124,height:40}} resizeMode={Image.resizeMode.contain}/>
+            </TouchableOpacity>
         </View>
 
     }

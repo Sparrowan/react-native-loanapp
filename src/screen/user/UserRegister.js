@@ -78,7 +78,7 @@ class RegisterForm extends Component{
     _onErrorClick(fieldName){
         const field = this.state.form[fieldName]
         if(field.hasError){
-            Toast.info(field.err)
+            Toast.info(field.err,1)
         }
     }
     _submit(){
@@ -87,7 +87,7 @@ class RegisterForm extends Component{
             let code = this.state.form.vcode
             //提交注册
             this.props.user.userLogin({
-                phone:phone.value,
+                phone:cleanString(phone.value),
                 code:code.value
             },()=>{
                 this.props.navigation.goBack()
@@ -98,9 +98,9 @@ class RegisterForm extends Component{
         let phone = this.state.form.phone
         let imgCode = this.state.form.password
         if(phone.value===''||phone.hasError){
-            Toast.info('请输入正确的手机号码')
+            Toast.info('请输入正确的手机号码',1)
         }else if(imgCode.value===''||imgCode.hasError){
-            Toast.info('请输入图片验证码')
+            Toast.info('请输入图片验证码',1)
         }else {
             //获取验证码
             this.props.user.userGetVCode({
@@ -116,7 +116,7 @@ class RegisterForm extends Component{
     _getValidateImg(imgByPhone){
         let phone = this.state.form.phone
         if(phone.value===''||phone.hasError){
-            Toast.info('请输入正确的手机号码')
+            Toast.info('请输入正确的手机号码',1)
         }else {
             //获取验证码
             imgByPhone(cleanString(phone.value))
@@ -128,7 +128,7 @@ class RegisterForm extends Component{
             <NavBar
                 title="注册"
                 rightIcon='times'
-                rightPress={()=>goBack()}
+                rightPress={()=>this.props.app.hideLoginView()}
                 rightIconSize={18}
             />
             <View>

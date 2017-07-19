@@ -1,5 +1,5 @@
 import React from 'react'
-import {Animated, StyleSheet, View, Text, AppRegistry} from 'react-native'
+import {Animated, StyleSheet, View, Text, AppRegistry,} from 'react-native'
 import {NetInfoDecorator} from './src/common/HttpTools'
 import AppNavigator from './src/common/Navigation'
 @NetInfoDecorator
@@ -7,7 +7,7 @@ class Root extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            promptPosition: new Animated.Value(0)
+            promptPosition: new Animated.Value(0),
         }
     }
 
@@ -28,7 +28,6 @@ class Root extends React.Component {
             })
         }
     }
-
     render() {
         let positionY = this.state.promptPosition.interpolate({
             inputRange: [0, 1],
