@@ -4,19 +4,12 @@ import {Toast} from 'antd-mobile'
 import App from '../common/HttpTools'
 class User{
     @observable cert = {}
-    @observable isLogin = false
-    constructor(){
-        App.isLogin().then((res)=>{
-            this.isLogin = res
-        })
-    }
     async userLogin(data,callback){
         const result = await login(data);
         if(result.msg === 'ok'){ //登录成功
-            App.sendMessage(JSON.stringify(result))
-            // if(callback){
-            //     callback()
-            // }
+            if(callback){
+                callback()
+            }
         }else {
             Toast.info(result.msg)
         }
@@ -33,6 +26,7 @@ class User{
     }
     async getUserCert(){
         const result = await getUserCertStatus();
+        App.test(result,'用户验证')
         if(result.data){
             runInAction(()=>{
                 this.cert = result.data;

@@ -22,11 +22,11 @@ class LoanApply extends Component {
 
     render() {
         const {home, navigation} = this.props
-        const {navigate,state} = navigation
+        const {navigate,state,goBack} = navigation
         let leftNavBarButton = {
             leftIcon:'angle-left',
             leftIconSize:18,
-            leftPress:() => navigate('UserProfile')
+            leftPress:() => goBack()
         }
         if(!state.params||!state.params.from){
             leftNavBarButton = {}

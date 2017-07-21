@@ -2,7 +2,7 @@ import {BaseUrl} from './GlobalConfig'
 import React, {Component} from 'react'
 import {Modal,Toast} from 'antd-mobile'
 const alert = Modal.alert;
-import {NetInfo,AsyncStorage,AlertIOS} from 'react-native'
+import {NetInfo,AsyncStorage,AlertIOS,DeviceEventEmitter} from 'react-native'
 const NetInfoDecorator = WrappedComponent => class extends Component {
     constructor(props) {
         super(props)
@@ -125,7 +125,7 @@ const App = {
         return value;
     },
 
-    setASCache(key, value) {
+    setASCache(key, value) { //AsyncStorage的value必须是字符串,要先序列化
         if (typeof value == 'object') {
             value = JSON.stringify(value);
         }
@@ -144,15 +144,20 @@ const App = {
     // core ajax handler
     async send(url, options,timeout) {
         let self = this;
-        let token = await this.getAccessToken();
+        let token = null;
+        let tokenStr = await this.getAccessToken(); //这里token是字符串
+        if(tokenStr){
+            token = JSON.parse(tokenStr)
+        }else {
+            token = ''
+        }
         let defaultOptions = {
             method: 'GET',
             headers: { //请求头里要带token
                 // 'appId':'ysy',
                 // 'token':token,
                 'Cookie':token,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
             },
         };
 
@@ -181,24 +186,26 @@ const App = {
             request.body = JSON.stringify(options['data'])
         }
         // todo support for https
+        //self.test(request,'请求')
         const fetchPromise = new Promise((resolve,reject)=>{
             fetch(request.url, request)
                 .then((response) => {
                     if(response.ok){
-                        //self.sendMessage(response.headers.map['set-cookie'])
-                        let t = response.headers.map['set-cookie']//如果响应头里有token就保存
+                        let t = response.headers.map['set-cookie']//如果响应头里有token就保存 ,这里是一个对象
                         if(t){ //保存token
+                            //self.test(t,'返回的cookie')
                             self.setLoginToken(t)
                         }
                         return response.json()
                     }else if(response.status===401||response.status===403){
+                        self.setLoginToken('')
                         return {code:-1,msg:'需要登录',needLogin:true}
                     }
                 })
                 .then((res) => {
                     self.config.debug && console.log(res);
                     if (res&&res.code) {
-                        if(res.code != 0){
+                        if(res.code != 0&&!res.needLogin){
                             self.handelErrcode(res);
                         }
                     }
@@ -248,8 +255,25 @@ const App = {
             default:Toast.info(content,duration,onClose,mask)
                 break;
         }
-    }
+    },
+    test(data,title='测试数据'){
+        if(data){
+            const type = typeof data
+            let console = ''
+            switch (type){
+                case 'object':console = JSON.stringify(data)
+                    break;
+                case 'string':console = data
+                    break;
+                case 'number':console = data+''
+                    break;
+                case 'boolean':console = data+''
+                    break;
+            }
+            this.sendMessage(console,title)
 
+        }
+    }
 };
 const get = ({url, params = {}, timeout}) => {
     return App.send(url,{

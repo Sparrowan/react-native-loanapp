@@ -90,7 +90,7 @@ class RegisterForm extends Component{
                 phone:cleanString(phone.value),
                 code:code.value
             },()=>{
-                this.props.navigation.goBack()
+                this.props.navigation.navigate('UserProfile')
             })
         }
     }
