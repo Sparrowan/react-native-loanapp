@@ -1,8 +1,9 @@
 import {observable, action,reaction,runInAction} from 'mobx'
 import validator from 'validator'
+import {getUserDetail} from '../service/user/user.base.service'
 import { district,findCityByIndex} from '../common/ChinaCity'
 class Personal{
-    form = {
+    @observable form = {
         city:{
             hasError:false,
             data:district,
@@ -64,7 +65,32 @@ class Personal{
             ]
         }
     }
-    init(){
+    @observable formValidate = false
+    async getUserDetail(){
+        const res = await getUserDetail()
+        if(res.result){
+            const options = res.result.option
+            for(let name in options){
+                if({}.hasOwnProperty.call(this.form,name)){
+                    this.form[name].data = options[name].map((item)=>{
+                        return {
+                            label:item.text,
+                            value:item.code
+                        }
+                    })
+                }
+            }
+            const user = res.result.data
+            for(let name in user){
+                if({}.hasOwnProperty.call(this.form,name)){
+                    if(typeof(this.form[name].value)==='object'){
+                        this.form[name].value.push(user[name])
+                    }else {
+                        this.form[name].value = user[name]
+                    }
+                }
+            }
+        }
         return this
     }
 }

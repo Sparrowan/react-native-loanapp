@@ -205,7 +205,7 @@ const App = {
                 .then((res) => {
                     self.config.debug && console.log(res);
                     if (res&&res.code) {
-                        if(res.code != 0&&!res.needLogin){
+                        if(res.code != 0){
                             self.handelErrcode(res);
                         }
                     }

@@ -1,12 +1,11 @@
 import React from 'react';
-import {observer} from 'mobx-react'
 import { Image, View ,StyleSheet,Text,} from 'react-native';
 import {NavBar,IFormItem,createForm} from '../../component/index'
 import {Button,Toast} from 'antd-mobile'
-import store,{inject}from '../../store/index'
-@observer
-@inject('personal')
 class PersonalInformation extends React.Component{
+    componentDidMount(){
+        this.props.personal.getUserDetail()
+    }
     render(){
         const {goBack} = this.props.navigation
         const {getFormFieldProps,formValidate} = this.props.form
@@ -65,4 +64,4 @@ const styles = StyleSheet.create({
         color: "#666"
     },
 })
-export default createForm(store.personal.init().form)(PersonalInformation)
+export default createForm('personal')(PersonalInformation)

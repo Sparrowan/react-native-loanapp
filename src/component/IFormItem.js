@@ -1,4 +1,6 @@
 import React,{Component,PropTypes} from 'react';
+import {observer} from 'mobx-react'
+import {inject} from '../store/index'
 import { Button, Image, View ,StyleSheet,Text} from 'react-native';
 import {Picker,InputItem,Toast} from 'antd-mobile'
 import {NavBar,Item,IPickerItem,VCode} from '../component/index'
@@ -86,7 +88,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#4da6f0'
     },
 })
-//必须传入一个一下类型的form
+//必须传入一个storeName,vm里必须有一个以下类型的form
 const defaultForm = {
     demo:{
         hasError:false,
@@ -94,24 +96,31 @@ const defaultForm = {
         rules:[{pattern:(val)=>val.length>3,errMsg:'字符串长度大于三'}]
     },
 }
-const createForm = function (form) {
+const createForm = function (storeName) {
     return function (WrapperComponent) {
+        @observer
+            @inject(storeName)
         class Form extends Component{
             constructor(props){
                 super(props)
                 this.state = {
-                    form:form||defaultForm,
-                    formValidate:false
+                    form:this.props[storeName]['form'],
+                    formValidate:this.props[storeName]['formValidate']
                 }
             }
             _getFormFieldHasError(fieldName){
-                return {}.hasOwnProperty.call(this.state.form,fieldName)?(this.state.form[fieldName].hasError===undefined?true:this.state.form[fieldName].hasError):true
+                const formField = this.props[storeName]['form']
+                return {}.hasOwnProperty.call(formField,fieldName)?(formField[fieldName].hasError===undefined?true:formField[fieldName].hasError):true
             }
             _getFormFieldValue(fieldName){
-                return {}.hasOwnProperty.call(this.state.form,fieldName)?(this.state.form[fieldName].value===undefined?'':this.state.form[fieldName].value):''
+                const formField = this.props[storeName]['form']
+
+                return {}.hasOwnProperty.call(formField,fieldName)?(formField[fieldName].value===undefined?'':formField[fieldName].value):''
             }
             _getFormFieldData(fieldName){
-                return {}.hasOwnProperty.call(this.state.form,fieldName)?(this.state.form[fieldName].data===undefined?{}:this.state.form[fieldName].data):{}
+                const formField = this.props[storeName]['form']
+
+                return {}.hasOwnProperty.call(formField,fieldName)?(formField[fieldName].data===undefined?{}:formField[fieldName].data):{}
             }
             _onFormFieldChange(fieldName,val){
                 const form = this.state.form
@@ -140,6 +149,8 @@ const createForm = function (form) {
                         break;
                     }
                 }
+                this.props[storeName]['form'] = newForm
+                this.props[storeName]['formValidate'] = formValidate
                 this.setState({
                     form:newForm,
                     formValidate
@@ -161,11 +172,11 @@ const createForm = function (form) {
                 }
             }
             render(){
-                const form = this.state.form
+                const form = this.props[storeName].form
                 const formProps = {
                     ...{form},
                     getFormFieldProps:this._getFormFieldProps.bind(this),
-                    formValidate:this.state.formValidate
+                    formValidate:this.props[storeName].formValidate
                 }
                 return <WrapperComponent {...this.props} form={formProps}/>
             }

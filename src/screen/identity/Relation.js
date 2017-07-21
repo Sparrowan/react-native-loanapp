@@ -4,8 +4,6 @@ import { Image, View ,StyleSheet,Text} from 'react-native';
 import {NavBar,IFormItem,createForm} from '../../component/index'
 import {Button,Toast} from 'antd-mobile'
 import store,{inject}from '../../store/index'
-@observer
-    @inject('relation')
 class Relation extends React.Component{
     render(){
         const {goBack} = this.props.navigation
@@ -55,4 +53,4 @@ const styles = StyleSheet.create({
         color: "#666"
     },
 })
-export default createForm(store.relation.init().form)(Relation)
+export default createForm('relation')(Relation)

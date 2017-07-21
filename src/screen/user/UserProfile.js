@@ -29,10 +29,19 @@ class UserProfile extends Component {
         })
     }
     componentDidMount(){
-        this.props.user.getUserCert()
+        this.props.user.getUserCert().then((needLogin)=>{
+            if(needLogin){
+                this.props.navigation.navigate('UserRegister')
+            }
+        })
     }
     render(){
         const {navigate} = this.props.navigation
+        const {cert} = this.props.user
+        let certArr = []
+        for(let item in cert){
+            certArr.push(cert[item].text)
+        }
         return (
             <View style={{flex: 1, backgroundColor: "#f3f3f3"}}>
                 <NavBar
@@ -62,14 +71,14 @@ class UserProfile extends Component {
                     </View>
                 </Image>:
                     <ScrollView>
-                    <Item name="头像" avatar={2} first={true} onPress={()=>navigate('avatar')}/>
+                    <Item name="头像" avatar={2} first={true}/>
                     <Item name="用户名" disable={true} subName="岳生煜"/>
                     <Text style={styles.title}>{"账号绑定"}</Text>
                     <Item name="手机"  icon="mobile" subName="135****0418"/>
                     <Text style={styles.title}>{"安全设置"}</Text>
-                    <Item name="个人信息" subName="未认证" subNameColor={'red'} onPress={()=>navigate('Personal')}/>
-                    <Item name="手机认证" subName="未认证"/>
-                    <Item name="紧急联系人" subName="未认证" onPress={()=>navigate('Relation')}/>
+                    <Item name="身份信息" subName={certArr[0]}  onPress={()=>navigate('avatar')}/>
+                    <Item name="个人信息" subName={certArr[1]}  onPress={()=>navigate('Personal')} />
+                    <Item name="手机认证" subName={certArr[2]} onPress={()=>navigate('Relation')}/>
                     <Item name="立即拿钱" onPress={()=>navigate('LoanApply',{from:'UserProfile'})}/>
                     <Item name="注册" onPress={()=>navigate('UserRegister')}/>
                 </ScrollView>

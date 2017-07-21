@@ -62,4 +62,4 @@ const styles = StyleSheet.create({
         color: "#666"
     },
 })
-export default createForm(store.personal.init().form)(Avatar)
+export default createForm('personal')(Avatar)
