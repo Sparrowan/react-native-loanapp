@@ -1,16 +1,18 @@
 import {observable, action,reaction,runInAction} from 'mobx'
 import {login,getValidateCode,getUserCertStatus} from '../service/user/user.base.service'
 import {Toast} from 'antd-mobile'
+import App from '../common/HttpTools'
 class User{
     @observable cert = {}
     async userLogin(data,callback){
         const result = await login(data);
         if(result.msg === 'ok'){ //登录成功
+            App.setLoginToken(result.token)
             if(callback){
                 callback()
             }
         }else {
-            Toast.info(result.msg,1)
+            Toast.info(result.msg)
         }
     }
     async userGetVCode(params,callback){

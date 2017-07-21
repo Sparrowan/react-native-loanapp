@@ -1,12 +1,11 @@
 import React,{Component} from 'react'
-import app from './app'
 import home from './home'
 import user from './user'
 import relation from './relation'
 import personal from './personal'
 import avatar from './avatar'
 const store = {
-    app,home,relation,personal,avatar,user
+    home,relation,personal,avatar,user
 }
 export default store
 //用于存储对应的store的wrapper组件
@@ -16,9 +15,6 @@ export function inject(...storeNames){
         if(storeNames.length===0){//无参默认全部注入
             stores = {...store}
         }else {
-            if(!storeNames.includes('app')){ //默认都会注入app
-                storeNames.push('app')
-            }
             for(let name of storeNames){
                 if({}.hasOwnProperty.call(store,name)){
                     stores[name] = store[name]

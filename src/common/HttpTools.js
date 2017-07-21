@@ -1,6 +1,8 @@
 import {BaseUrl} from './GlobalConfig'
 import React, {Component} from 'react'
-import {NetInfo,AsyncStorage,DeviceEventEmitter} from 'react-native'
+import {Modal,Toast} from 'antd-mobile'
+const alert = Modal.alert;
+import {NetInfo,AsyncStorage,AlertIOS} from 'react-native'
 const NetInfoDecorator = WrappedComponent => class extends Component {
     constructor(props) {
         super(props)
@@ -21,98 +23,239 @@ const NetInfoDecorator = WrappedComponent => class extends Component {
 }
 const delay = timeout => {
     return new Promise((resolve, reject) => {
-        setTimeout(() => reject({status:-1,statusText:'请求超时'}), timeout * 1000)
+        setTimeout(() => resolve({code:-2,msg:'请求超时'}), timeout * 1000)
     })
 }
-const defaultErr = {status:0,statusText:'网络异常'}
-const successHandler = function (response) {
-    return response
-}
-const errorHandler = function (response) {
-    if(response.status===401||response.status===403){ //登陆失效
-        DeviceEventEmitter.emit('needLogin')
-    }
-    return response
-}
-const get = ({url, params = {}, timeout}) => {
-    const paramArr = []
-    if (Object.keys(params).length !== 0) {
-        for (const key in params) {
-            paramArr.push(`${key}=${params[key]}`)
+let currentRequest = {};
+const App = {
+
+    config: {
+
+        api: BaseUrl,
+        // app 版本号
+        version: 1.1,
+
+        debug: 1,
+    },
+
+    serialize: function (obj) {
+        let str = [];
+        for (let p in obj)
+            if (obj.hasOwnProperty(p)) {
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            }
+        return str.join("&");
+    },
+
+    // build random number
+    random: function () {
+        return ((new Date()).getTime() + Math.floor(Math.random() * 9999));
+    },
+
+
+    getGUID: function () {
+        let S4 = function () {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        };
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    },
+
+
+    async isLogin() {
+        let res = await this.getAccessToken()
+        if(res){
+            return true
+        }
+        return false
+    },
+
+    async getAccessToken() {
+        let key = 'gloabl_login_token';
+
+        // {token: '',expire_time: '',user: {userid:1,username:'',head_url}}
+        let token = await AsyncStorage.getItem(key);
+        if (token === false) {
+            return '';
+        }
+        return typeof (token) === 'string' ? token : '';
+    },
+    // 获取授权的web url地址  
+    async getAuthWebUrl(targetUrl,cb) {
+        let token = await App.isLogin();
+        let url = 'http://test.cashpp.com/redirect?access_token=' + token + '&url=' + encodeURIComponent(targetUrl + '?HIDE_HEADER=1&ios_ref=1');
+        typeof cb === 'function' && cb(url);
+        this.config.debug && console.info(url);
+    },
+
+    // 清除用户的缓存数据            
+    clearUserCache() {
+        return this.setASCache('gloabl_login_token', '');
+    },
+
+
+    async checkLogin(func) {
+        let key = 'gloabl_login_token';
+        let value = await AsyncStorage.getItem(key);
+        if (value !== null||value!=='') {
+            func(value);
+        } else {
+            func(false);
+        }
+
+    },
+    setLoginToken(token){
+        if(token){
+            this.setASCache('gloabl_login_token',token)
+        }
+    },
+    async getUser(func) {
+        let user = await AsyncStorage.getItem('user');
+        if (user != null) {
+            user = JSON.parse(user);
+            func(user);
+        }
+    },
+
+    async queryASVal(key) {
+        let value = await AsyncStorage.getItem(key);
+        if (value === null) {
+
+            return false;
+        }
+        return value;
+    },
+
+    setASCache(key, value) {
+        if (typeof value == 'object') {
+            value = JSON.stringify(value);
+        }
+        AsyncStorage.setItem(key, value)
+    },
+
+    setCurrentRequest: function (url, errcode) {
+        // to do remote alarm platform
+
+        return currentRequest = {
+            url: url,
+            errcode: errcode
+        };
+    },
+
+    // core ajax handler
+    async send(url, options,timeout) {
+        let self = this;
+        let token = await this.getAccessToken();
+        let defaultOptions = {
+            method: 'GET',
+            headers: {
+                'appid':'ysy',
+                'token':token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        };
+
+        let request = Object.assign({}, defaultOptions, {method:options.method});
+        let httpMethod = options['method'].toLocaleUpperCase();
+        let full_url = '';
+        if (httpMethod === 'GET') {
+            full_url = this.config.api + url + '?' + this.serialize(options.data);
+        } else {
+            // handle some to 'POST'
+            full_url = this.config.api + url;
+        }
+
+        if (this.config.debug) {
+            console.log('HTTP has finished %c' + httpMethod + ':  %chttp://' + full_url, 'color:red;', 'color:blue;');
+        }
+        request.url = full_url;
+        // build body data
+        if (options['method'] === 'UPLOAD') {
+            let formData = new FormData();
+            for (let k in options.data) {
+                formData.append(k, options.data[k]);
+            }
+            request.body = formData;
+        }else if(options['method']==='POST'){
+            request.body = JSON.stringify(options['data'])
+        }
+        // todo support for https
+        const fetchPromise = new Promise((resolve,reject)=>{
+            fetch(request.url, request)
+                .then((response) => {
+                    if(response.ok){
+                        return response.json()
+                    }else if(response.status===401||response.status===403){
+                        return {code:-1,msg:'需要登录',needLogin:true}
+                    }
+                })
+                .then((res) => {
+                    self.config.debug && console.log(res);
+                    if (res&&res.code) {
+                        if(res.code != 0){
+                            self.handelErrcode(res);
+                        }
+                    }
+                    resolve(res)
+                })
+                .catch((error) => {
+                    self.sendMessage('网络错误501')
+                    console.warn(error);
+                });
+        })
+        if (timeout === undefined) {
+            return fetchPromise
+        } else {
+            return Promise.race([fetchPromise, delay(timeout)])
+        }
+    },
+
+
+    handelErrcode: function (result) {
+        this.config.debug&&console.log(result);
+        return this.sendMessage(result.msg);
+    },
+
+    // 提示类
+
+    sendMessage(msg, title='提示') {
+        if (!msg) {
+            return false;
+        }
+        AlertIOS.alert(title, msg);
+    },
+    //全局显示提示框
+    //title:标题,string
+    //desc:描述信息,string或reactdom
+    //buttons:按钮数组 {text:"",onPress:,style:}
+    alert(title,desc,buttons){
+        alert(title,desc,buttons)
+    },
+    showTip(content,type='info',duration=0.5,onClose=()=>{},mask=true){
+        switch (type){
+            case 'success':Toast.success(content,duration,onClose,mask)
+                break;
+            case 'fail':Toast.fail(content,duration,onClose,mask)
+                break;
+            case 'loading':Toast.loading(content,duration,onClose,mask)
+                break;
+            default:Toast.info(content,duration,onClose,mask)
+                break;
         }
     }
-    const urlStr = `${BaseUrl+url}?${paramArr.join('&')}`
-    const fetchPromise = new Promise((resolve,reject)=>{
-        fetch(urlStr).then((response)=>{
-            if(response.ok){
-                return response.json()
-            }else {
-                reject(errorHandler(response))
-            }
-        }).then((response)=>{
-            resolve(response)
-        }).catch(()=>{
-            reject(defaultErr)
-        })
-    })
-    if (timeout === undefined) {
-        return fetchPromise
-    } else {
-        return Promise.race([fetchPromise, delay(timeout)])
-    }
+
+};
+const get = ({url, params = {}, timeout}) => {
+    return App.send(url,{
+        method:'GET',
+        data:params
+    },timeout)
 }
 const post = ({url,data={},timeout}) => {
-    const fetchPromise = new Promise((resolve,reject)=>{
-        fetch(BaseUrl+url,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json;charset=UTF-8',
-            },
-            body: JSON.stringify(data)
-        }).then((response)=>{
-            if(response.ok){
-                return response.json()
-            }else {
-                reject(errorHandler(response))
-            }
-        }).then((response)=>{
-            resolve(response)
-        }).catch(()=>{
-            reject(defaultErr)
-        })
-    })
-    if(timeout===undefined){
-        return fetchPromise
-    }else {
-        return Promise.race([fetchPromise,delay(timeout)])
-    }
+    return App.send(url,{
+        method:'POST',
+        data:data
+    },timeout)
 }
-const upload = function({url,data={},timeout}){
-    const {file,img} = data
-    let uploadData = new FormData();
-    uploadData.append('file', file.nativeFile)
-    uploadData.append('type', img[0].type)
-    const fetchPromise = new Promise((resolve,reject)=>{
-        fetch(BaseUrl+url,{
-            method: 'POST',
-            body: uploadData
-        }).then((response)=>{
-            if(response.ok){
-                return response.json()
-            }else {
-                reject(errorHandler(response))
-            }
-        }).then((response)=>{
-            resolve(response)
-        }).catch(()=>{
-            reject(defaultErr)
-        })
-    })
-    if(timeout===undefined){
-        return fetchPromise
-    }else {
-        return Promise.race([fetchPromise,delay(timeout)])
-    }
-}
-export { get,post,NetInfoDecorator,upload}
+export { get,post,NetInfoDecorator}
+export default  App;

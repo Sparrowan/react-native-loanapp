@@ -1,15 +1,34 @@
 import React from 'react';
 import { StackNavigator} from 'react-navigation';
 import Home from '../screen/Home'
-import {UserRegister} from './user/UserRegister'
+import {UserSetting} from '../screen/user/UserSetting'
+import LoanApply from '../screen/loan/LoanApply'
+import {RegisterProtocol} from '../screen/webView/WebView'
+import avatar from '../screen/identity/Avatar'
+import Relation from '../screen/identity/Relation'
+import Personal from '../screen/identity/PersonalInformation'
 export default  SimpleApp = StackNavigator({
-    Home: {
-        screen: Home
+    LoanApply:{
+        screen:LoanApply
     },
-    UserRegister: {
-        screen: UserRegister
+    Home:{
+      screen:Home
     },
-}, {
-    headerMode: 'none',
-    mode: 'modal'
-})
+    UserSetting:{
+        screen:UserSetting
+    },
+    RegisterProtocol:{
+        screen:RegisterProtocol
+    },
+    avatar:{
+        screen:avatar
+    },
+    Relation:{
+        screen:Relation
+    },
+    Personal:{
+        screen:Personal
+    }
+},{
+    headerMode:'none'
+});

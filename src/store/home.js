@@ -7,7 +7,7 @@ class Home{
     @action
     async init(end){ //scrollview刷新的回调
         try{
-            let data = await getCardList(4);
+            let data = await getCardList();
             data.result.cards.forEach(function(item, index) {
                 if(index > 0) {
                     item.isLock = true;
