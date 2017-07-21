@@ -12,33 +12,20 @@ import Item from '../../component/Item'
 import {inject} from '../../store/index'
 import {observer} from 'mobx-react'
 import {CLIENTWIDTH} from '../../common/GlobalConfig'
-import App from '../../common/HttpTools'
 //FontAwesome
 class UserProfile extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            login:false
-        }
-    }
-    componentWillMount(){
-        App.isLogin().then((res)=>{
-            this.setState({
-                login:res
-            })
-        })
-    }
     componentDidMount(){
         //this.props.user.getUserCert()
     }
     render(){
         const {navigate} = this.props.navigation
+        const {isLogin}  = this.props.user
         return (
             <View style={{flex: 1, backgroundColor: "#f3f3f3"}}>
                 <NavBar
                     title="账户信息"
                 />
-                {!this.state.login? <Image
+                {!isLogin? <Image
                     style={{width: CLIENTWIDTH, height: 230, alignItems: 'center', backgroundColor: 'transparent'}}
                     source={require('../../resource/img_my_head.png')}
                 >

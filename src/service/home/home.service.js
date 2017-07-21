@@ -1,13 +1,13 @@
 import {get,post} from '../../common/HttpTools'
 const getCardList =  function(timeout){
     return get({
-        url:'/rest/loan/apply/start',
+        url:'/loan/apply/start',
         timeout
     })
 }
 const applyLoan = function (data) {
     return post({
-        url:'/rest/loan/apply/applied',
+        url:'/loan/apply/applied',
         data:data
     })
 }

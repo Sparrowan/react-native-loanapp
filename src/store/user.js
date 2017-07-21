@@ -4,13 +4,19 @@ import {Toast} from 'antd-mobile'
 import App from '../common/HttpTools'
 class User{
     @observable cert = {}
+    @observable isLogin = false
+    constructor(){
+        App.isLogin().then((res)=>{
+            this.isLogin = res
+        })
+    }
     async userLogin(data,callback){
         const result = await login(data);
         if(result.msg === 'ok'){ //登录成功
-            App.setLoginToken(result.token)
-            if(callback){
-                callback()
-            }
+            App.sendMessage(JSON.stringify(result))
+            // if(callback){
+            //     callback()
+            // }
         }else {
             Toast.info(result.msg)
         }

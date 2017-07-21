@@ -70,7 +70,7 @@ const App = {
     },
 
     async getAccessToken() {
-        let key = 'gloabl_login_token';
+        let key = 'app_token';
 
         // {token: '',expire_time: '',user: {userid:1,username:'',head_url}}
         let token = await AsyncStorage.getItem(key);
@@ -89,12 +89,12 @@ const App = {
 
     // 清除用户的缓存数据            
     clearUserCache() {
-        return this.setASCache('gloabl_login_token', '');
+        return this.setASCache('app_token', '');
     },
 
 
     async checkLogin(func) {
-        let key = 'gloabl_login_token';
+        let key = 'app_token';
         let value = await AsyncStorage.getItem(key);
         if (value !== null||value!=='') {
             func(value);
@@ -105,7 +105,7 @@ const App = {
     },
     setLoginToken(token){
         if(token){
-            this.setASCache('gloabl_login_token',token)
+            this.setASCache('app_token',token)
         }
     },
     async getUser(func) {
@@ -147,9 +147,10 @@ const App = {
         let token = await this.getAccessToken();
         let defaultOptions = {
             method: 'GET',
-            headers: {
-                'appid':'ysy',
-                'token':token,
+            headers: { //请求头里要带token
+                // 'appId':'ysy',
+                // 'token':token,
+                'Cookie':token,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
@@ -184,6 +185,11 @@ const App = {
             fetch(request.url, request)
                 .then((response) => {
                     if(response.ok){
+                        //self.sendMessage(response.headers.map['set-cookie'])
+                        let t = response.headers.map['set-cookie']//如果响应头里有token就保存
+                        if(t){ //保存token
+                            self.setLoginToken(t)
+                        }
                         return response.json()
                     }else if(response.status===401||response.status===403){
                         return {code:-1,msg:'需要登录',needLogin:true}
