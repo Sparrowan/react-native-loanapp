@@ -5,15 +5,6 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import LoanRecord from './loan/LoanRecords'
 import UserProfile from './user/UserProfile'
 export default TabNavigator({
-    LoanRecord: {
-        screen: LoanRecord ,
-        navigationOptions:{
-            tabBarLabel: '借款列表',
-            tabBarIcon: ({ tintColor }) => (
-                <Icon size={26} name="credit-card" color={tintColor}/>
-            )
-        }
-    },
     UserProfile: {
         screen: UserProfile,
         navigationOptions: {
@@ -23,6 +14,16 @@ export default TabNavigator({
             )
         }
     },
+    LoanRecord: {
+        screen: LoanRecord ,
+        navigationOptions:{
+            tabBarLabel: '借款列表',
+            tabBarIcon: ({ tintColor }) => (
+                <Icon size={26} name="credit-card" color={tintColor}/>
+            )
+        }
+    },
+
 }, {
     tabBarOptions: {
         activeTintColor: '#0398ff',

@@ -11,6 +11,11 @@ const applyLoan = function (data) {
         data:data
     })
 }
+const getLoanStatus = function () {
+    return get({
+        url:'/loan/apply/status'
+    })
+}
 export {
-    getCardList,applyLoan
+    getCardList,applyLoan,getLoanStatus
 }

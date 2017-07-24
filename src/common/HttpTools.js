@@ -197,9 +197,11 @@ const App = {
                             self.setLoginToken(t)
                         }
                         return response.json()
-                    }else if(response.status===401||response.status===403){
+                    }else if(response.status===401||response.status===403){ //登录过期
                         self.setLoginToken('')
                         return {code:-1,msg:'需要登录',needLogin:true}
+                    }else {
+                        return {code:-2,msg:'未知错误'}
                     }
                 })
                 .then((res) => {

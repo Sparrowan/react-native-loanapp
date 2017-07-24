@@ -73,8 +73,8 @@ class UserProfile extends Component {
                     <ScrollView>
                     <Item name="头像" avatar={2} first={true}/>
                     <Item name="用户名" disable={true} subName="岳生煜"/>
-                    <Text style={styles.title}>{"账号绑定"}</Text>
-                    <Item name="手机"  icon="mobile" subName="135****0418"/>
+                    <Text style={styles.title}>{"精彩内容"}</Text>
+                    <Item name="关于我们"  icon="mobile" color={'red'} subName="极速花"/>
                     <Text style={styles.title}>{"安全设置"}</Text>
                     <Item name="身份信息" subName={certArr[0]}  onPress={()=>navigate('avatar')}/>
                     <Item name="个人信息" subName={certArr[1]}  onPress={()=>navigate('Personal')} />

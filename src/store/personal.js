@@ -66,10 +66,11 @@ class Personal{
         }
     }
     @observable formValidate = false
+    @observable showSubmitBtn = true
     async getUserDetail(){
         const res = await getUserDetail()
         if(res.result){
-            const options = res.result.option
+            const options = res.result.option //选项
             for(let name in options){
                 if({}.hasOwnProperty.call(this.form,name)){
                     this.form[name].data = options[name].map((item)=>{
@@ -80,7 +81,7 @@ class Personal{
                     })
                 }
             }
-            const user = res.result.data
+            const user = res.result.data //信息
             for(let name in user){
                 if({}.hasOwnProperty.call(this.form,name)){
                     if(typeof(this.form[name].value)==='object'){
@@ -89,6 +90,9 @@ class Personal{
                         this.form[name].value = user[name]
                     }
                 }
+            }
+            if(res.result.isEdit){
+                this.showSubmitBtn = false
             }
         }
         return this

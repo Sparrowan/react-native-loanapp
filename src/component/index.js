@@ -8,6 +8,8 @@ import NavBar from './NavBar'
 import {PopupContent} from './ApplyPopup'
 import {VCode,VCodeImg} from './VCode'
 import {IFormItem,createForm} from './IFormItem'
+import TabCell from './ScrollTabViewCell'
 export {
-    Item,IPickerItem,NavBar,IRefreshListView,IRefreshScrollView,IButton,ICard,PopupContent,VCode,createForm,IFormItem,VCodeImg
+    Item,IPickerItem,NavBar,IRefreshListView,IRefreshScrollView,IButton,ICard,PopupContent,VCode,createForm,IFormItem,VCodeImg,
+    TabCell
 }
