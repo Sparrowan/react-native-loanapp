@@ -193,7 +193,7 @@ export class IRefreshScrollView extends ScrollView{
                     {this._rendArrowOrActivity()}
                     <Text style={defaultHeaderStyles.statusTitle}>{this.state.refreshTitle}</Text>
                 </View>
-                <Text style={defaultHeaderStyles.date}>{'上次更新时间:'+this.state.date}</Text>
+                {/*<Text style={defaultHeaderStyles.date}>{'上次更新时间:'+this.state.date}</Text>*/}
             </View>
         )
     }

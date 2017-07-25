@@ -16,7 +16,7 @@ class LoanRecordItem extends Component{
             if({}.hasOwnProperty.call(recordFormMap,name)){
                 if(record[name]){
                     content.push(
-                        <Item name={recordFormMap[name].text} disable={true} subName={record[name].toString()+(recordFormMap[name].suffix?recordFormMap[name].suffix:'')}/>
+                        <Item key={name} name={recordFormMap[name].text} disable={true} subName={record[name].toString()+(recordFormMap[name].suffix?recordFormMap[name].suffix:'')}/>
                       )
                 }
             }
@@ -30,9 +30,9 @@ class LoanRecordItem extends Component{
         }
 
         return <View style={styles.container}>
-            <View style={{flexDirection:'row',}}>
+            <View style={{flexDirection:'row',marginBottom:10}}>
                 <Icon size={14} name="file-text-o"/>
-                <Text style={{fontSize:18,color:'black',fontWeight:'bold'}}>借款状态<Text style={styles.loanStatusLabel}>{}</Text></Text>
+                <Text style={{fontSize:18,color:'black',fontWeight:'bold',marginLeft:5}}>借款状态<Text style={styles.loanStatusLabel}>{record.statusText}</Text></Text>
             </View>
             <Text style={styles.loanIdLabel}>
                 借款编号:{record.refId}
@@ -46,6 +46,7 @@ class LoanRecordItem extends Component{
 }
 const styles = StyleSheet.create({
     container:{
+        backgroundColor:'#f3f3f3',
         width:rnScreen.width,
         paddingHorizontal:15,
         paddingVertical:20,
@@ -54,12 +55,13 @@ const styles = StyleSheet.create({
     loanStatusLabel:{
         fontSize:18,
         color:rnScreen.primaryColor,
-        fontWeight:'bold'
+        fontWeight:'bold',
     },
     loanIdLabel:{
         fontSize:16,
         color:'#617e8c',
-        fontWeight:'bold'
+        fontWeight:'bold',
+        marginBottom:5
     },
     loanDetail:{
         padding:5
