@@ -1,5 +1,7 @@
 import {observable, action,reaction,runInAction} from 'mobx'
 import {getCardList,applyLoan} from '../service/home/home.service'
+import app from '../common/HttpTools'
+
 class Home{
     @observable cardList = []
     @observable pageInfo = {}
@@ -8,8 +10,9 @@ class Home{
     async init(end){ //scrollview刷新的回调
         try{
             let data = await getCardList();
+            app.test(data)
             data.result.cards.forEach(function(item, index) {
-                if(index > 0) {
+                if(!item.default) {
                     item.isLock = true;
                 }
             });

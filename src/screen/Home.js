@@ -2,7 +2,7 @@ import React from 'react'
 import {TabNavigator} from 'react-navigation'
 import {StyleSheet,Image} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import LoanRecord from './loan/LoanRecords'
+import Loan from './loan/Loan'
 import UserProfile from './user/UserProfile'
 export default TabNavigator({
     UserProfile: {
@@ -15,7 +15,7 @@ export default TabNavigator({
         }
     },
     LoanRecord: {
-        screen: LoanRecord ,
+        screen: Loan ,
         navigationOptions:{
             tabBarLabel: '借款列表',
             tabBarIcon: ({ tintColor }) => (

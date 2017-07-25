@@ -1,50 +1,23 @@
 import React,{Component} from 'react'
 import {observer} from 'mobx-react'
-import { StyleSheet, View} from 'react-native';
-import {NavBar,TabCell} from '../../component/index'
-import ScrollableTabView from 'react-native-scrollable-tab-view'
-import {LoanStatus} from './LoanStatus'
-
-const titles = ['借款进度'];
-const controllers = [
-    {categoryId: 1, controller: LoanStatus},
-]
-
-
-
-@observer
-class LoanRecords extends Component {
-    render() {
-        return (
-            <View style={[styles.container]}>
-                <NavBar
-                    title='借款记录'
-                />
-                <ScrollableTabView
-                    renderTabBar={() => <TabCell tabNames={titles}/>}
-                    tabBarPosition='top'
-                    scrollWithoutAnimation={false}
-                >
-                    {controllers.map((data, index) => {
-                        let Component = data.controller;
-                        return (
-                            <Component
-                                key={titles[index]}
-                                tabLabel={titles[index]}
-                                categoryId={data.categoryId}
-                            />
-                        )
-                    })}
-                </ScrollableTabView>
-
-            </View>
-        );
+import {inject} from '../../store/index'
+import { StyleSheet, View,Text} from 'react-native';
+import {IRefreshListView,LoanRecordItem} from '../../component/index'
+class LoanRecords extends Component{
+    componentDidMount(){
+        this.props.loan.getLoanRecords()
+    }
+    render(){
+        const {loanRecords} = this.props.loan
+        const arr = loanRecords.slice()
+        return <View style={{flex:1,backgroundColor:'#fafafa'}}>
+            {arr.map((item)=>{
+                return <LoanRecordItem key={item.refId} record={item} onClick={this._gotoLoanProtocol.bind(this)}/>
+            })}
+        </View>
+    }
+    _gotoLoanProtocol(loanId){
+        //this.props.navigation.navigate()
     }
 }
-export default LoanRecords
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-});
+export default inject('loan')(observer(LoanRecords))

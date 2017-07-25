@@ -1,16 +1,16 @@
 import {observable, action,reaction,runInAction} from 'mobx'
-import {login,getValidateCode,getUserCertStatus} from '../service/user/user.base.service'
-import {Toast} from 'antd-mobile'
+import {login,getValidateCode,getUserCertStatus,getUserBindBankCard} from '../service/user/user.base.service'
+import app from '../common/HttpTools'
+
 class User{
     @observable cert = {}
+    @observable cardList = []
     async userLogin(data,callback){
         const result = await login(data);
         if(result.msg === 'ok'){ //登录成功
             if(callback){
                 callback()
             }
-        }else {
-            Toast.info(result.msg)
         }
     }
     async userGetVCode(params,callback){
@@ -19,8 +19,6 @@ class User{
             if(callback){
                 callback()
             }
-        }else {
-            Toast.info(result.msg,1)
         }
     }
     async getUserCert(){
@@ -32,6 +30,15 @@ class User{
             return false
         }else if(result.needLogin){
             return true
+        }
+    }
+    async getBankCards(){
+        const res = await getUserBindBankCard();
+        if(res.result){
+            app.test(res.result)
+            runInAction(()=>{
+                this.cardList = res.result;
+            })
         }
     }
 }

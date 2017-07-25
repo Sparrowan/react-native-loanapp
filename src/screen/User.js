@@ -7,6 +7,7 @@ import {RegisterProtocol} from '../screen/webView/WebView'
 import avatar from '../screen/identity/Avatar'
 import Relation from '../screen/identity/Relation'
 import Personal from '../screen/identity/PersonalInformation'
+import UserBankCards from '../screen/user/UserBankCards'
 export default  SimpleApp = StackNavigator({
     LoanApply:{
         screen:LoanApply
@@ -28,6 +29,9 @@ export default  SimpleApp = StackNavigator({
     },
     Personal:{
         screen:Personal
+    },
+    BankCards:{
+        screen:UserBankCards
     }
 },{
     headerMode:'none'

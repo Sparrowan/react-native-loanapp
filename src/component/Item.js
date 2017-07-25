@@ -54,11 +54,11 @@ export default class Item extends Component {
         onPress: PropTypes.func //点击事件
     }
     _render(){
-        let {icon, iconSize, name, subName, color, first, avatar, disable, font,subNameColor} = this.props
+        let {icon, iconSize, name, subName, color, first, avatar, disable, font,subNameColor,style} = this.props
         font = font||"FontAwesome"
         const Icon = Font[font]
         return (
-            <View style={styles.listItem}>
+            <View style={[styles.listItem,style]}>
                 {icon?(<Icon name={icon} size={iconSize||20} style={{width: 22, marginRight:5, textAlign:"center"}} color={color || "#4da6f0"} />):null}
                 <View style={[styles.listInfo, {borderTopWidth: !first?1:0}]}>
                     <View style={{flex: 1}}><Text>{name}</Text></View>

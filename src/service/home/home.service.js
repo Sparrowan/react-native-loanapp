@@ -16,6 +16,16 @@ const getLoanStatus = function () {
         url:'/loan/apply/status'
     })
 }
+const getLoanRecords = function () {
+    return get({
+        url:'/loan/transaction/record'
+    })
+}
+const loanApproveNext = function () {
+    return get({
+        url:'/loan/apply/approved'
+    })
+}
 export {
-    getCardList,applyLoan,getLoanStatus
+    getCardList,applyLoan,getLoanStatus,getLoanRecords,loanApproveNext
 }

@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component,PropTypes } from 'react';
 import {observer} from 'mobx-react'
-import {AppRegistry,StyleSheet,View,Image,Animated,Text,Dimensions} from 'react-native'
+import {StyleSheet,View,Image,Animated,Text,Dimensions} from 'react-native'
 @observer
 class Card extends Component {
+    static propTypes = {
+        cardInfo:PropTypes.object.isRequired
+    }
     render() {
         const { cardInfo} = this.props
         return (
@@ -23,7 +26,7 @@ class Card extends Component {
         );
     }
     _renderImage(){
-        let img = ''
+        let img = null
         switch (this.props.cardInfo.tier){
             case 'GOLD':img = <Image source={require('../resource/card/card_gold.jpg')} style={styles.img}/>
                 break;
@@ -37,7 +40,6 @@ class Card extends Component {
 }
 
 export default Card;
-AppRegistry.registerComponent('card',()=>Card)
 const styles = StyleSheet.create({
     card: {
         position:'relative',

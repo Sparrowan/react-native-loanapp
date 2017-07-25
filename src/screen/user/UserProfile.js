@@ -73,6 +73,7 @@ class UserProfile extends Component {
                     <ScrollView>
                     <Item name="头像" avatar={2} first={true}/>
                     <Item name="用户名" disable={true} subName="岳生煜"/>
+                    <Item name="我的银行卡" onPress={()=>navigate('BankCards')}/>
                     <Text style={styles.title}>{"精彩内容"}</Text>
                     <Item name="关于我们"  icon="mobile" color={'red'} subName="极速花"/>
                     <Text style={styles.title}>{"安全设置"}</Text>
@@ -82,7 +83,6 @@ class UserProfile extends Component {
                     <Item name="立即拿钱" onPress={()=>navigate('LoanApply',{from:'UserProfile'})}/>
                     <Item name="注册" onPress={()=>navigate('UserRegister')}/>
                 </ScrollView>
-
                 }
             </View>
         )

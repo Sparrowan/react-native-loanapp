@@ -9,7 +9,8 @@ import {PopupContent} from './ApplyPopup'
 import {VCode,VCodeImg} from './VCode'
 import {IFormItem,createForm} from './IFormItem'
 import TabCell from './ScrollTabViewCell'
+import LoanRecordItem from './LoanRecordItem'
 export {
-    Item,IPickerItem,NavBar,IRefreshListView,IRefreshScrollView,IButton,ICard,PopupContent,VCode,createForm,IFormItem,VCodeImg,
+    Item,IPickerItem,NavBar,IRefreshListView,IRefreshScrollView,IButton,ICard,PopupContent,VCode,createForm,IFormItem,VCodeImg,LoanRecordItem,
     TabCell
 }

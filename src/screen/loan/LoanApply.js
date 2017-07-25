@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {observer} from 'mobx-react'
 import {inject} from '../../store/index'
-import {StyleSheet, Image, View, AppRegistry, Animated, Dimensions, Text, Easing} from 'react-native';
-import {Button, Popup,} from 'antd-mobile';
+import {StyleSheet,View, Animated, Dimensions, Text,TouchableOpacity} from 'react-native';
+import { Popup,} from 'antd-mobile';
 import {IRefreshScrollView, ICard, NavBar, PopupContent} from '../../component/index'
 @inject('home')
 @observer
@@ -54,9 +54,11 @@ class LoanApply extends Component {
                         })
                     }
                 </IRefreshScrollView>
-
-                <Button style={styles.applyBtn} onClick={this._showApplyPopup}><Text
-                    style={{fontSize: 12, color: '#fff'}}>立即拿钱</Text></Button>
+                <TouchableOpacity onPress={this._showApplyPopup}>
+                    <View style={styles.applyBtn}>
+                        <Text style={{fontSize: 12, color: '#fff'}}>立即拿钱</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -72,7 +74,6 @@ class LoanApply extends Component {
     }
 }
 export default LoanApply
-AppRegistry.registerComponent('loanApply', () => LoanApply)
 const styles = StyleSheet.create({
     header: {
         backgroundColor: "#0398ff",
@@ -90,11 +91,11 @@ const styles = StyleSheet.create({
     },
     applyBtn: {
         position: 'absolute',
-        left: Dimensions.get('window').width / 2 - 23,
-        bottom: 0,
-        width: 58,
-        height: 58,
-        borderRadius: 29,
+        left: Dimensions.get('window').width / 2 - 39,
+        bottom: 10,
+        width: 78,
+        height: 78,
+        borderRadius: 39,
         paddingVertical: 20,
         backgroundColor: '#0398ff',
         alignItems: 'center',

@@ -16512,3 +16512,15 @@ export function findCityByIndex(values){
         }
     }).join(' ')
 }
+export function findIndexArrByCityName(city,pattern=' ') {
+    let arr = city&&city.split(pattern)
+    let indexArr = []
+    arr.forEach((item)=>{
+        for(let name in citys){
+            if(citys[name]===item){
+                indexArr.push(name)
+            }
+        }
+    })
+    return indexArr
+}

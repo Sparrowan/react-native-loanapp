@@ -1,7 +1,9 @@
 import React from 'react';
+import {observer} from 'mobx-react'
 import { Image, View ,StyleSheet,Text,} from 'react-native';
-import {NavBar,IFormItem,createForm} from '../../component/index'
+import {NavBar,IFormItem,createForm,Item} from '../../component/index'
 import {Button,Toast} from 'antd-mobile'
+@observer
 class PersonalInformation extends React.Component{
     componentDidMount(){
         this.props.personal.getUserDetail()
@@ -41,6 +43,8 @@ class PersonalInformation extends React.Component{
                 type={{name:'picker',pickerProps:{title:'月收入',cols:1}}}
                 formFiled={getFormFieldProps('incomeMonth')}
             />
+            <Text style={styles.title}>{"紧急联系人"}</Text>
+            <Item name={'紧急联系人'} onPress={()=>this.props.navigation.navigate('Relation')}/>
             <Text style={styles.title}>{"其他"}</Text>
             <IFormItem
                 type={{name:'picker',pickerProps:{title:'婚姻状况',cols:1}}}

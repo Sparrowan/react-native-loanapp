@@ -1,7 +1,7 @@
 import {observable, action,reaction,runInAction} from 'mobx'
 import validator from 'validator'
 import {getUserDetail} from '../service/user/user.base.service'
-import { district,findCityByIndex} from '../common/ChinaCity'
+import { district,findCityByIndex,findIndexArrByCityName} from '../common/ChinaCity'
 class Personal{
     @observable form = {
         city:{
@@ -84,8 +84,10 @@ class Personal{
             const user = res.result.data //信息
             for(let name in user){
                 if({}.hasOwnProperty.call(this.form,name)){
-                    if(typeof(this.form[name].value)==='object'){
-                        this.form[name].value.push(user[name])
+                    if(name==='city'){ //city做特殊处理
+                        this.form[name].value = findIndexArrByCityName(user[name])
+                    }else if(typeof(this.form[name].value)==='object'){
+                        this.form[name].value = [user[name]]
                     }else {
                         this.form[name].value = user[name]
                     }

@@ -44,5 +44,5 @@ const submitCert = function (data) { //提交审核
     })
 }
 export {
-    login,getValidateCode,getUserCertStatus,getUserDetail,submitUserContact,submitUserDetail,getUserBindBankCard
+    login,getValidateCode,getUserCertStatus,getUserDetail,submitUserContact,submitUserDetail,getUserBindBankCard,submitCert
 }
