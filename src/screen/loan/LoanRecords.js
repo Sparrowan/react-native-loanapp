@@ -1,8 +1,8 @@
 import React,{Component} from 'react'
 import {observer} from 'mobx-react'
 import {inject} from '../../store/index'
-import { StyleSheet, View,Text} from 'react-native';
-import {IRefreshListView,LoanRecordItem} from '../../component/index'
+import {  View,} from 'react-native';
+import {IRefreshListView,LoanRecordItem,IRefreshScrollView} from '../../component/index'
 class LoanRecords extends Component{
     componentDidMount(){
         this.props.loan.getLoanRecords()
@@ -11,9 +11,14 @@ class LoanRecords extends Component{
         const {loanRecords} = this.props.loan
         const arr = loanRecords.slice()
         return <View style={{flex:1,backgroundColor:'#fafafa'}}>
-            {arr.map((item)=>{
-                return <LoanRecordItem key={item.refId} record={item} onClick={this._gotoLoanProtocol.bind(this)}/>
-            })}
+            <IRefreshScrollView
+                style={{flex:1}}
+                onRefresh={(end) => this.props.loan.getLoanRecords(end)}
+            >
+                {arr.map((item,i)=>{
+                    return <LoanRecordItem key={i} record={item} onClick={this._gotoLoanProtocol.bind(this)}/>
+                })}
+            </IRefreshScrollView>
         </View>
     }
     _gotoLoanProtocol(loanId){

@@ -16,16 +16,19 @@ class UserAddCard extends Component{
         const {idCard,userName} = cardInfo.userInfo
         return <View style={{flex:1}}>
             <NavBar
+                leftIcon="angle-left"
+                leftIconSize={18}
+                leftPress={() => goBack()}
                 title={'绑定银行卡'}
             />
             <List renderHeader={() => '添加新的银行卡'}>
-                <InputItem editable={false} value={userName}>
+                <InputItem editable={false} value={userName} labelNumber={5}>
                     姓名
                 </InputItem>
-                <InputItem editable={false} value={idCard}>
+                <InputItem editable={false} value={idCard} labelNumber={5}>
                     身份证号码
                 </InputItem>
-                <InputItem  placeholder={'请输入您的银行卡号'} clear={true} type='bankCard' onChange={(val)=>{
+                <InputItem  placeholder={'请输入您的银行卡号'} labelNumber={5} clear={true} type={'bankCard'} onChange={(val)=>{
                     this.props.user.newCard.bankCard = cleanString(val)
                 }}>
                     银行卡号
@@ -33,7 +36,7 @@ class UserAddCard extends Component{
             </List>
             <Button style={{margin:10}} type="primary" onClick={
                 ()=>{this.props.user.addCard().then((res)=>res&&goBack())}
-            }>保存</Button>
+            }>绑定</Button>
         </View>
     }
 }

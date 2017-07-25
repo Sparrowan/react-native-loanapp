@@ -1,5 +1,7 @@
 import {observable, action,reaction,runInAction} from 'mobx'
-import {login,getValidateCode,getUserCertStatus,getUserBindBankCard,changeBindCard,addNewBankCard} from '../service/user/user.base.service'
+import {login,getValidateCode,getUserCertStatus,getUserBindBankCard,changeBindCard,addNewBankCard
+        ,getPhoneValidateUrl
+} from '../service/user/user.base.service'
 import app from '../common/HttpTools'
 class User{
     @observable cert = { //验证信息
@@ -23,6 +25,13 @@ class User{
             }
         }
     }
+    async phoneValidate(){
+        const res = await getPhoneValidateUrl();
+        if(res.result){
+            return res.result.authUrl
+        }
+        return ''
+    }
     async userGetVCode(params,callback){
         const result = await getValidateCode(params);
         if(result.msg === 'ok'){ //获取短信验证码成功
@@ -45,7 +54,6 @@ class User{
     async getBankCards(){
         const res = await getUserBindBankCard();
         if(res.result){
-            app.test(res.result)
             runInAction(()=>{
                 this.cardInfo = res.result;
             })
@@ -59,7 +67,8 @@ class User{
         return false
     }
     async addCard(){
-        const res = await addNewBankCard(this.newCard.toJs());
+        app.test(this.newCard)
+        const res = await addNewBankCard(this.newCard);
         if(res.msg === 'ok'){
             return true
         }

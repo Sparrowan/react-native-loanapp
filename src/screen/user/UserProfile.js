@@ -79,7 +79,7 @@ class UserProfile extends Component {
                     <Text style={styles.title}>{"安全设置"}</Text>
                     <Item name="身份信息" subName={certArr[0]}  onPress={()=>navigate('avatar')}/>
                     <Item name="个人信息" subName={certArr[1]}  onPress={()=>navigate('Personal')} />
-                    <Item name="手机认证" subName={certArr[2]} onPress={()=>navigate('Relation')}/>
+                    <Item name="手机认证" subName={certArr[2]} onPress={()=>navigate('PhoneValidate')}/>
                     <Item name="立即拿钱" onPress={()=>navigate('LoanApply',{from:'UserProfile'})}/>
                     <Item name="注册" onPress={()=>navigate('UserRegister')}/>
                 </ScrollView>

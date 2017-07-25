@@ -1,6 +1,6 @@
 import React,{Component,PropTypes} from 'react'
 import {observer} from 'mobx-react'
-import {View,Image,Text,TouchableOpacity,StyleSheet} from 'react-native'
+import {View,Text,StyleSheet} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {Item} from './index'
 @observer
@@ -30,9 +30,9 @@ class LoanRecordItem extends Component{
         }
 
         return <View style={styles.container}>
-            <View style={{}}>
+            <View style={{flexDirection:'row',}}>
                 <Icon size={14} name="file-text-o"/>
-                <Text style={{fontSize:18,fontColor:'black',fontWeight:'bold'}}>借款状态<Text style={styles.loanStatusLabel}>{}</Text></Text>
+                <Text style={{fontSize:18,color:'black',fontWeight:'bold'}}>借款状态<Text style={styles.loanStatusLabel}>{}</Text></Text>
             </View>
             <Text style={styles.loanIdLabel}>
                 借款编号:{record.refId}
