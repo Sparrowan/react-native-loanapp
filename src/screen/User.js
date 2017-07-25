@@ -8,6 +8,7 @@ import avatar from '../screen/identity/Avatar'
 import Relation from '../screen/identity/Relation'
 import Personal from '../screen/identity/PersonalInformation'
 import UserBankCards from '../screen/user/UserBankCards'
+import UserAddCard from '../screen/user/UserAddCard'
 export default  SimpleApp = StackNavigator({
     LoanApply:{
         screen:LoanApply
@@ -32,6 +33,9 @@ export default  SimpleApp = StackNavigator({
     },
     BankCards:{
         screen:UserBankCards
+    },
+    UserAddCard:{
+        screen:UserAddCard
     }
 },{
     headerMode:'none'

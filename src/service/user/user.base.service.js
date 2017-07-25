@@ -43,6 +43,19 @@ const submitCert = function (data) { //提交审核
         url:'/user/info/certSumbit'
     })
 }
+const changeBindCard = function (data) { //修改绑定银行卡
+    return post({
+        url:'/user/info/bindBankCard',
+        data:data
+    })
+}
+const addNewBankCard = function (data) { //添加新的银行卡
+    return post({
+        url:'/user/addBankCard',
+        data:data
+    })
+}
 export {
-    login,getValidateCode,getUserCertStatus,getUserDetail,submitUserContact,submitUserDetail,getUserBindBankCard,submitCert
+    login,getValidateCode,getUserCertStatus,getUserDetail,submitUserContact,submitUserDetail,getUserBindBankCard,submitCert,
+    changeBindCard,addNewBankCard
 }

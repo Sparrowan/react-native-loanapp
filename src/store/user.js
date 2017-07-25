@@ -1,10 +1,20 @@
 import {observable, action,reaction,runInAction} from 'mobx'
-import {login,getValidateCode,getUserCertStatus,getUserBindBankCard} from '../service/user/user.base.service'
+import {login,getValidateCode,getUserCertStatus,getUserBindBankCard,changeBindCard,addNewBankCard} from '../service/user/user.base.service'
 import app from '../common/HttpTools'
-
 class User{
-    @observable cert = {}
-    @observable cardList = []
+    @observable cert = { //验证信息
+
+    }
+    @observable cardInfo = { //卡信息和个人信息
+        cardList:[],
+        userInfo:{},
+        activity:null
+    }
+    @observable newCard = { //新绑定的银行卡
+        bankCode: '',
+        bankCard: '',
+        reservePhoneNumber: ''
+    }
     async userLogin(data,callback){
         const result = await login(data);
         if(result.msg === 'ok'){ //登录成功
@@ -37,9 +47,23 @@ class User{
         if(res.result){
             app.test(res.result)
             runInAction(()=>{
-                this.cardList = res.result;
+                this.cardInfo = res.result;
             })
         }
+    }
+    async bindCard(){
+        const res = await changeBindCard({type:'loan',cardId:this.cardInfo.activity});
+        if(res.msg === 'ok'){
+          return true
+        }
+        return false
+    }
+    async addCard(){
+        const res = await addNewBankCard(this.newCard.toJs());
+        if(res.msg === 'ok'){
+            return true
+        }
+        return false
     }
 }
 export default new User()
