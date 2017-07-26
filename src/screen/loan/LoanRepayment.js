@@ -1,28 +1,25 @@
 import React,{Component} from 'react'
 import {observer} from 'mobx-react'
 import { StyleSheet, View} from 'react-native';
-import {NavBar,TabCellOpacity} from '../../component/index'
+import {NavBar,TabCellUnderline} from '../../component/index'
 import ScrollableTabView from 'react-native-scrollable-tab-view'
-import LoanStatus from './LoanStatus'
-import LoanRecords from './LoanRecords'
-const titles = ['借款进度','借款记录'];
+import LoanRepaymentNow from './LoanRepaymentNow'
+import LoanRepaymentDelay from './LoanRepaymentDelay'
+const titles = ['我要还款','延期还款'];
 const controllers = [
-    {categoryId: 1, controller: LoanStatus},
-    {categoryId: 2, controller: LoanRecords},
+    {categoryId: 1, controller: LoanRepaymentNow},
+    {categoryId: 2, controller: LoanRepaymentDelay},
 ]
-
-
-
 @observer
-class Loan extends Component {
+class LoanRepayment extends Component {
     render() {
         return (
             <View style={[styles.container]}>
                 <NavBar
-                    title='借款记录'
+                    title='我要还款'
                 />
                 <ScrollableTabView
-                    renderTabBar={() => <TabCellOpacity tabNames={titles}/>}
+                    renderTabBar={() => <TabCellUnderline/>}
                     tabBarPosition='top'
                     scrollWithoutAnimation={false}
                 >
@@ -43,7 +40,7 @@ class Loan extends Component {
         );
     }
 }
-export default Loan
+export default LoanRepayment
 const styles = StyleSheet.create({
     container: {
         flex: 1,

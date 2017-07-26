@@ -1,6 +1,5 @@
 import {observable, action,reaction,runInAction} from 'mobx'
 import {getCardList,applyLoan} from '../service/home/home.service'
-import app from '../common/HttpTools'
 
 class Home{
     @observable cardList = []
@@ -10,16 +9,12 @@ class Home{
     async init(end){ //scrollview刷新的回调
         try{
             let data = await getCardList();
-            app.test(data)
             data.result.cards.forEach(function(item, index) {
                 if(!item.default) {
                     item.isLock = true;
                 }
             });
             const result = data.result
-            if(end){
-                end()
-            }
             runInAction(
                 ()=>{
                     let pageInfo = {
@@ -42,6 +37,9 @@ class Home{
                     this.applyData.day = (result.loan&&result.loan.term) ? result.loan.term+'' : pageInfo.options.days[0].value;
                     this.pageInfo = pageInfo;
                     this.cardList = result.cards;
+                    if(end){
+                       end()
+                    }
                 }
             )
         }catch (err){

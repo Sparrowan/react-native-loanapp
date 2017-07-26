@@ -11,7 +11,7 @@ const getValidateCode = function (params) { //获取短信验证码
         params:params
     })
 }
-const getPhoneValidateUrl = function () {
+const getPhoneValidateUrl = function () { //获取手机验证地址
     return get({
         url:'/moxie/carrier/mobile/authUrl'
     })
@@ -62,5 +62,5 @@ const addNewBankCard = function (data) { //添加新的银行卡
 }
 export {
     login,getValidateCode,getUserCertStatus,getUserDetail,submitUserContact,submitUserDetail,getUserBindBankCard,submitCert,
-    changeBindCard,addNewBankCard,getPhoneValidateUrl
+    changeBindCard,addNewBankCard,getPhoneValidateUrl,
 }

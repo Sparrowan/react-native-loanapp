@@ -26,6 +26,18 @@ const loanApproveNext = function () {
         url:'/loan/apply/approved'
     })
 }
+const getRepaymentInfo = function () { //获取个人还款信息
+    return get({
+        url:'/loan/apply/repay'
+    })
+}
+const repayLoan = function (data) { //还款
+    return post({
+        url:'/loan/apply/repay',
+        data:data
+    })
+}
+
 export {
-    getCardList,applyLoan,getLoanStatus,getLoanRecords,loanApproveNext
+    getCardList,applyLoan,getLoanStatus,getLoanRecords,loanApproveNext,getRepaymentInfo,repayLoan
 }

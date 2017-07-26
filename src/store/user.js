@@ -1,6 +1,6 @@
 import {observable, action,reaction,runInAction} from 'mobx'
 import {login,getValidateCode,getUserCertStatus,getUserBindBankCard,changeBindCard,addNewBankCard
-        ,getPhoneValidateUrl
+        ,getPhoneValidateUrl,
 } from '../service/user/user.base.service'
 import app from '../common/HttpTools'
 class User{

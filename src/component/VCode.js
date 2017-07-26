@@ -54,7 +54,7 @@ class VCode extends Component{
 class VCodeImg extends Component{
     static propTypes = {
         defaultValue:PropTypes.string,
-        style:PropTypes.object,
+        style:View.propTypes.style,
         textStyle:PropTypes.object,
         onSend:PropTypes.func,
     }

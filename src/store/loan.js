@@ -1,13 +1,20 @@
 import {observable, action,reaction,runInAction} from 'mobx'
-import {getLoanStatus,getLoanRecords,loanApproveNext} from '../service/home/home.service'
+import {getLoanStatus,getLoanRecords,loanApproveNext,getRepaymentInfo,repayLoan} from '../service/home/home.service'
 import app from '../common/HttpTools'
 class Loan{
     @observable loan = {
         steps:[],
         activeStepIndex:0
-    }
+    };
     @observable curCard = null;
-    @observable loanRecords = []
+    @observable loanRecords = [];
+    @observable repayment = { //还款信息
+        fullPay: true, //是否全额
+        day: 7 //借款天数
+    };
+    @observable repaymentInfo = {
+
+    };
     async getLoanStatus(end){
         const res = await getLoanStatus();
         if(res.result){
@@ -57,7 +64,19 @@ class Loan{
             break;
     }
     return name;
-}
-
+    }
+    async getRepaymentInfo(){
+        const res = await getRepaymentInfo();
+        if(res.result){
+            app.test(res.result)
+            this.repaymentInfo = res.result;
+        }
+    }
+    async repay(){
+        const res = await repayLoan(this.repayment);
+        if(res.result&&res.result.call === 'form'){
+            app.test(res.result)
+        }
+    }
 }
 export default new Loan()

@@ -76,6 +76,7 @@ class UserProfile extends Component {
                     <Item name="我的银行卡" onPress={()=>navigate('BankCards')}/>
                     <Text style={styles.title}>{"精彩内容"}</Text>
                     <Item name="关于我们"  icon="mobile" color={'red'} subName="极速花"/>
+                    <Item name="更多产品"  icon="apple"  onPress={()=>{navigate('MoreProducts')}}/>
                     <Text style={styles.title}>{"安全设置"}</Text>
                     <Item name="身份信息" subName={certArr[0]}  onPress={()=>navigate('avatar')}/>
                     <Item name="个人信息" subName={certArr[1]}  onPress={()=>navigate('Personal')} />

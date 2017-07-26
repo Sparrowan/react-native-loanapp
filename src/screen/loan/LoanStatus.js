@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import {observer} from 'mobx-react'
 import {inject} from '../../store/index'
-import { StyleSheet, View,Text} from 'react-native';
+import { StyleSheet, View,} from 'react-native';
 import {IRefreshScrollView,ICard} from '../../component/index'
 import {Steps,Button} from 'antd-mobile'
 const Step = Steps.Step
@@ -61,7 +61,7 @@ class LoanStatus extends Component{
             case 'FUNDED':
             case 'EXTENSION':
             case 'PARTIAL_PAY_OFF':
-            default:btn = <Button  style={styles.btn} type="primary"  onClick={()=>{}}>开始还款</Button>;
+            default:btn = <Button  style={styles.btn} type="primary"  onClick={()=>{navigate('LoanRepayment')}}>开始还款</Button>;
             break;
         }
         return btn

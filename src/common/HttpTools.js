@@ -2,7 +2,7 @@ import {BaseUrl} from './GlobalConfig'
 import React, {Component} from 'react'
 import {Modal,Toast} from 'antd-mobile'
 const alert = Modal.alert;
-import {NetInfo,AsyncStorage,AlertIOS,DeviceEventEmitter} from 'react-native'
+import {NetInfo,AsyncStorage,AlertIOS} from 'react-native'
 const NetInfoDecorator = WrappedComponent => class extends Component {
     constructor(props) {
         super(props)
@@ -30,12 +30,10 @@ let currentRequest = {};
 const App = {
 
     config: {
-
         api: BaseUrl,
-        // app 版本号
-        version: 1.1,
-
+        version: 1.1, // app 版本号
         debug: 1,
+        expiredTime:2*60*60*1000 //缓存过期时间(毫秒) 目前设定为2小时
     },
 
     serialize: function (obj) {
@@ -126,7 +124,7 @@ const App = {
     },
 
     setASCache(key, value) { //AsyncStorage的value必须是字符串,要先序列化
-        if (typeof value == 'object') {
+        if (typeof value === 'object') {
             value = JSON.stringify(value);
         }
         AsyncStorage.setItem(key, value)
@@ -162,7 +160,7 @@ const App = {
         };
 
         let request = Object.assign({}, defaultOptions, {method:options.method});
-        let httpMethod = options['method'].toLocaleUpperCase();
+        let httpMethod = options['method'].toLocaleUpperCase(); //
         let full_url = '';
         if (httpMethod === 'GET') {
             full_url = this.config.api + url + '?' + this.serialize(options.data);
@@ -176,48 +174,73 @@ const App = {
         }
         request.url = full_url;
         // build body data
-        if (options['method'] === 'UPLOAD') {
+        if (httpMethod === 'UPLOAD') {
             let formData = new FormData();
             for (let k in options.data) {
                 formData.append(k, options.data[k]);
             }
             request.body = formData;
-        }else if(options['method']==='POST'){
+        }else if(httpMethod==='POST'){
             request.body = JSON.stringify(options['data'])
         }
         // todo support for https
-        //self.test(request,'请求')
-        const fetchPromise = new Promise((resolve,reject)=>{
-            fetch(request.url, request)
-                .then((response) => {
-                    if(response.ok){
-                        let t = response.headers.map['set-cookie']//如果响应头里有token就保存 ,这里是一个对象
-                        if(t){ //保存token
-                            //self.test(t,'返回的cookie')
-                            self.setLoginToken(t)
+        //self.test(request,'请求') 添加get缓存,过期时间
+        let fetchPromise = null;
+        let cacheValue = null;
+        let readCache = false;
+        if(httpMethod==='GET'){
+            cacheValue = await AsyncStorage.getItem(url);
+            if(cacheValue&&cacheValue!==''){
+                const now = Date.now();
+                const recent = JSON.parse(cacheValue).expiredTime
+                if(now-recent<this.config.expiredTime){
+                    readCache = true;
+                }else {
+                    AsyncStorage.setItem(url,'')
+                }
+            }
+        }
+        if(readCache){
+            fetchPromise = Promise.resolve(JSON.parse(cacheValue))
+        }else {
+            fetchPromise =  new Promise((resolve,reject)=>{
+                fetch(request.url, request)
+                    .then((response) => {
+                        if(response.ok){
+                            let t = response.headers.map['set-cookie']//如果响应头里有token就保存 ,这里是一个对象
+                            if(t){ //保存token
+                                //self.test(t,'返回的cookie')
+                                self.setLoginToken(t)
+                            }
+                            return response.json()
+                        }else if(response.status===401||response.status===403){ //登录过期
+                            self.setLoginToken('')
+                            return {code:-1,msg:'需要登录',needLogin:true}
+                        }else {
+                            return {code:-2,msg:'未知错误'}
                         }
-                        return response.json()
-                    }else if(response.status===401||response.status===403){ //登录过期
-                        self.setLoginToken('')
-                        return {code:-1,msg:'需要登录',needLogin:true}
-                    }else {
-                        return {code:-2,msg:'未知错误'}
-                    }
-                })
-                .then((res) => {
-                    self.config.debug && console.log(res);
-                    if (res&&res.code) {
-                        if(res.code != 0){
-                            self.handelErrcode(res);
+                    })
+                    .then((res) => {
+                        self.config.debug && console.log(res);
+                        if (res&&res.code) {
+                            if(res.code != 0){
+                                self.handelErrcode(res);
+                            }else {
+                                if(httpMethod==='GET'){ //缓存
+                                    res['expiredTime'] = Date.now();
+                                    AsyncStorage.setItem(url,JSON.stringify(res))
+                                }
+                            }
                         }
-                    }
-                    resolve(res)
-                })
-                .catch((error) => {
-                    self.sendMessage('网络错误501')
-                    console.warn(error);
-                });
-        })
+                        resolve(res)
+                    })
+                    .catch((error) => {
+                        self.sendMessage('网络错误501')
+                        console.warn(error);
+                    });
+            })
+        }
+
         if (timeout === undefined) {
             return fetchPromise
         } else {
