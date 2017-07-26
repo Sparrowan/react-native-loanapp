@@ -5,7 +5,7 @@ import {NavBar,TabCellUnderline} from '../../component/index'
 import ScrollableTabView from 'react-native-scrollable-tab-view'
 import LoanRepaymentNow from './LoanRepaymentNow'
 import LoanRepaymentDelay from './LoanRepaymentDelay'
-const titles = ['我要还款','延期还款'];
+const titles = ['立即还款','延期还款'];
 const controllers = [
     {categoryId: 1, controller: LoanRepaymentNow},
     {categoryId: 2, controller: LoanRepaymentDelay},
@@ -13,10 +13,13 @@ const controllers = [
 @observer
 class LoanRepayment extends Component {
     render() {
+        const {goBack} = this.props.navigation
         return (
             <View style={[styles.container]}>
                 <NavBar
                     title='我要还款'
+                    leftIcon='angle-left'
+                    leftPress={()=>goBack()}
                 />
                 <ScrollableTabView
                     renderTabBar={() => <TabCellUnderline/>}
