@@ -12,9 +12,7 @@ class Loan{
         fullPay: true, //是否全额
         day: 7 //借款天数
     };
-    @observable repaymentInfo = {
-
-    };
+    @observable repaymentInfo = null;
     async getLoanStatus(end){
         const res = await getLoanStatus();
         if(res.result){

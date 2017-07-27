@@ -102,9 +102,7 @@ const App = {
 
     },
     setLoginToken(token){
-        if(token){
-            this.setASCache('app_token',token)
-        }
+        this.setASCache('app_token',token)
     },
     async getUser(func) {
         let user = await AsyncStorage.getItem('user');

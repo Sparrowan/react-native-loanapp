@@ -127,9 +127,6 @@ class RegisterForm extends Component{
         return <View style={{flex:1,backgroundColor:'#f3f3f3'}}>
             <NavBar
                 title="注册"
-                rightIcon='times'
-                rightPress={()=>goBack()}
-                rightIconSize={18}
             />
             <View>
                 <View style={styles.logo}>

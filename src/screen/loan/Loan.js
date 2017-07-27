@@ -1,6 +1,7 @@
 import React,{Component} from 'react'
 import {observer} from 'mobx-react'
 import { StyleSheet, View} from 'react-native';
+import App from '../../common/HttpTools'
 import {NavBar,TabCellOpacity} from '../../component/index'
 import ScrollableTabView from 'react-native-scrollable-tab-view'
 import LoanStatus from './LoanStatus'
