@@ -37,9 +37,28 @@ class MoreProducts extends Component {
         );
     }
 }
+class LoanProtocol extends Component {
 
+    render() {
+        const {goBack,state} = this.props.navigation
+        const id = state.params.loanId;
+        return (
+            <View style={[styles.container]}>
+                <NavBar
+                    title='更多相关产品'
+                    leftIcon='angle-left'
+                    leftPress={()=>goBack()}
+                />
+                <WebView
+                    style={styles.webView}
+                    source={{url:`http://test.cashpp.com/index.html#/protocol/loan/${id}`}}
+                />
+            </View>
+        );
+    }
+}
 export  {
-    RegisterProtocol,MoreProducts
+    RegisterProtocol,MoreProducts,LoanProtocol
 }
 const styles = StyleSheet.create({
     container: {

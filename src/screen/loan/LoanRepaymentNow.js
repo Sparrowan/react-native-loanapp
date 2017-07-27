@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import {observer} from 'mobx-react'
 import {inject} from '../../store/index'
-import { View,StyleSheet,Text,TouchableOpacity} from 'react-native';
+import { View,StyleSheet,Text,ScrollView} from 'react-native';
 import App from '../../common/HttpTools'
 import {List,Button} from 'antd-mobile'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -31,37 +31,41 @@ class LoanRepaymentNow extends Component{
                 overdue:`您处于逾期第${Math.abs(leftDays)-7}天，逾期每天费用是${overdue.dayMoney}元`
             }
             return <View style={{flex:1,backgroundColor:'#fafafa'}}>
-                <View style={styles.dueDate}>
-                    <View style={[styles.dueDateLabel,{}]}>
-                        <Text>到期时间</Text>
-                        <Text>{dueDate}</Text>
+                <ScrollView
+                    style={{flex:1}}
+                >
+                    <View style={styles.dueDate}>
+                        <View style={[styles.dueDateLabel,{backgroundColor:leftDays<0?'#f76260':'#1aad19'}]}>
+                            <Text style={{fontSize:20,color:'#fff',fontWeight:'bold'}}>到期时间</Text>
+                            <Text style={{fontSize:20,color:'#fff',fontWeight:'bold'}}>{dueDate}</Text>
+                        </View>
                     </View>
-                </View>
-                <List>
-                    <Item extra={(dueAmount+parseFloat(overdueFee)+'元')}>应还金额</Item>
-                    <Item extra={dueAmount+'元'} thumb={<TouchableOpacity onPress={()=>this._showModal('到期金额','您在到期日应还的金额')}>
-                        <Icon name="apple" size={12}/>
-                    </TouchableOpacity>}>到期金额</Item>
-                    {leftDays>=-7&&leftDays<=-1&&<Item extra={grace.amount+'元'} thumb={<TouchableOpacity onPress={()=>this._showModal('宽限费用',infoMessage.grace)}>
-                        <Icon name="apple" size={12}/>
-                    </TouchableOpacity>}>宽限费用</Item>}
-                    {leftDays<-7&&<Item extra={overdue.amount+'元'} thumb={<TouchableOpacity onPress={()=>this._showModal('逾期费用',infoMessage.overdue)}>
-                        <Icon name="apple" size={12}/>
-                    </TouchableOpacity>}>逾期费用</Item>}
-                </List>
-                <View style={styles.edge}></View>
-                <List>
-                    <Item extra={defaultCardNo+'(换卡还款)'} arrow="horizontal" onClick={()=>this.props.navigation.navigate('BankCards')}>还款银行卡</Item>
-                </List>
-                <View style={styles.edge}></View>
-                <List>
-                    <Item arrow="horizontal" onClick={()=>this._showModal('支付宝还款',<Text>
+                    <List>
+                        <Item extra={(dueAmount+parseFloat(overdueFee)+'元')}>应还金额</Item>
+                        <Item extra={dueAmount+'元'} onClick={()=>this._showModal('到期金额',<Text style={{textAlign:'center',flex:1}}>
+                            您在到期日应还的金额
+                        </Text>)} arrow="horizontal">到期金额</Item>
+                        {leftDays<0&&<Item arrow="horizontal" extra={grace.amount+'元'} onClick={()=>this._showModal('宽限费用',<Text style={{textAlign:'center',flex:1}}>
+                            {infoMessage.grace}
+                        </Text>)}>宽限费用</Item>}
+                        {leftDays<-7&&<Item arrow="horizontal" extra={overdue.amount+'元'} onClick={()=>this._showModal('逾期费用',<Text style={{textAlign:'center',flex:1}}>
+                            {infoMessage.overdue}
+                        </Text>)}>逾期费用</Item>}
+                    </List>
+                    <View style={styles.edge}></View>
+                    <List>
+                        <Item extra={defaultCardNo+'(换卡还款)'} wrap={true} arrow="horizontal" onClick={()=>this.props.navigation.navigate('BankCards')}>还款银行卡</Item>
+                    </List>
+                    <View style={styles.edge}></View>
+                    <List>
+                        <Item arrow="horizontal" onClick={()=>this._showModal('支付宝还款',<Text>
                             极速花支付宝账号：<Text style={{color:'#0398ff'}}>service@cashpp.cn</Text>
-                        ☆☆注意：请备注好您的姓名和电话，并截图发给小花~
-                        花花收到款后24小时之内会更改您的状态，您可再次申请借款。
-                    </Text>)}>其他还款方式</Item>
-                </List>
-                <Button  style={{margin:10}} type="primary"  onClick={()=>this._showRepayModal()}>确认还款</Button>
+                            ☆☆注意：请备注好您的姓名和电话，并截图发给小花~
+                            花花收到款后24小时之内会更改您的状态，您可再次申请借款。
+                        </Text>)}>其他还款方式</Item>
+                    </List>
+                    <Button  style={{margin:10}} type="primary"  onClick={()=>this._showRepayModal()}>确认还款</Button>
+                </ScrollView>
             </View>
         }
     }
@@ -80,9 +84,9 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     dueDateLabel:{
-        width:100,
-        height:100,
-        borderRadius:50,
+        width:rnScreen.width/2,
+        height:rnScreen.width/2,
+        borderRadius:rnScreen.width/4,
         alignItems:'center',
         justifyContent:'center'
     },
@@ -94,7 +98,7 @@ const styles = StyleSheet.create({
     edge:{
         width:rnScreen.width,
         height:10,
-        backgroundColor:'#aaa'
+        backgroundColor:'#fafafa'
     }
 })
 export default inject('loan')(observer(LoanRepaymentNow))

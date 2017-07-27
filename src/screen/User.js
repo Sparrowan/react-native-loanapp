@@ -3,7 +3,7 @@ import { StackNavigator} from 'react-navigation';
 import Home from '../screen/Home'
 import {UserSetting} from '../screen/user/UserSetting'
 import LoanApply from '../screen/loan/LoanApply'
-import {RegisterProtocol,MoreProducts} from '../screen/webView/WebView'
+import {MoreProducts,LoanProtocol} from '../screen/webView/WebView'
 import PhoneValidate from '../screen/webView/PhoneValidate'
 import avatar from '../screen/identity/Avatar'
 import Relation from '../screen/identity/Relation'
@@ -20,9 +20,6 @@ export default  SimpleApp = StackNavigator({
     },
     UserSetting:{
         screen:UserSetting
-    },
-    RegisterProtocol:{
-        screen:RegisterProtocol
     },
     avatar:{
         screen:avatar
@@ -47,6 +44,9 @@ export default  SimpleApp = StackNavigator({
     },
     MoreProducts:{
         screen:MoreProducts
+    },
+    LoanProtocol:{
+        screen:LoanProtocol
     }
 },{
     headerMode:'none'

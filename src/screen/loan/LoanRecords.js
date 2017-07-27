@@ -22,7 +22,7 @@ class LoanRecords extends Component{
         </View>
     }
     _gotoLoanProtocol(loanId){
-        //this.props.navigation.navigate()
+        this.props.navigation.navigate('LoanProtocol',{loanId})
     }
 }
 export default inject('loan')(observer(LoanRecords))

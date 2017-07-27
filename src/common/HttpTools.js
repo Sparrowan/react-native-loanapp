@@ -215,7 +215,7 @@ const App = {
                             self.setLoginToken('')
                             return {code:-1,msg:'需要登录',needLogin:true}
                         }else {
-                            return {code:-2,msg:'未知错误'}
+                            return response.json() //其他错误,带有code和msg,错误提示
                         }
                     })
                     .then((res) => {
