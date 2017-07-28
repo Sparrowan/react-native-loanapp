@@ -2,7 +2,7 @@ import {BaseUrl} from './GlobalConfig'
 import React, {Component} from 'react'
 import {Modal,Toast} from 'antd-mobile'
 const alert = Modal.alert;
-import {NetInfo,AsyncStorage,AlertIOS} from 'react-native'
+import {NetInfo,AsyncStorage,Alert,DeviceEventEmitter} from 'react-native'
 const NetInfoDecorator = WrappedComponent => class extends Component {
     constructor(props) {
         super(props)
@@ -213,6 +213,7 @@ const App = {
                             return response.json()
                         }else if(response.status===401||response.status===403){ //登录过期
                             self.setLoginToken('')
+                            DeviceEventEmitter.emit('login')
                             return {code:-1,msg:'需要登录',needLogin:true}
                         }else {
                             return response.json() //其他错误,带有code和msg,错误提示
@@ -258,7 +259,7 @@ const App = {
         if (!msg) {
             return false;
         }
-        AlertIOS.alert(title, msg);
+        Alert.alert(title, msg);
     },
     //全局显示提示框
     //title:标题,string

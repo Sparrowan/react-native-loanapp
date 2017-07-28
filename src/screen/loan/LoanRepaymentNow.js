@@ -3,9 +3,9 @@ import {observer} from 'mobx-react'
 import {inject} from '../../store/index'
 import { View,StyleSheet,Text,ScrollView} from 'react-native';
 import App from '../../common/HttpTools'
-import {List,Button} from 'antd-mobile'
-import Icon from 'react-native-vector-icons/FontAwesome'
-const Item = List.Item
+import {List,Button,Modal} from 'antd-mobile'
+import {Item} from '../../component/index'
+const LItem = List.Item
 class LoanRepaymentNow extends Component{
     componentDidMount(){
         this.props.loan.getRepaymentInfo()
@@ -41,39 +41,52 @@ class LoanRepaymentNow extends Component{
                         </View>
                     </View>
                     <List>
-                        <Item extra={(dueAmount+parseFloat(overdueFee)+'元')}>应还金额</Item>
-                        <Item extra={dueAmount+'元'} onClick={()=>this._showModal('到期金额',<Text style={{textAlign:'center',flex:1}}>
+                        <LItem extra={(dueAmount+parseFloat(overdueFee)+'元')}>应还金额</LItem>
+                        <LItem extra={dueAmount+'元'} onClick={()=>this._showModal('到期金额',<Text style={{textAlign:'center',flex:1}}>
                             您在到期日应还的金额
-                        </Text>)} arrow="horizontal">到期金额</Item>
-                        {leftDays<0&&<Item arrow="horizontal" extra={grace.amount+'元'} onClick={()=>this._showModal('宽限费用',<Text style={{textAlign:'center',flex:1}}>
-                            {infoMessage.grace}
-                        </Text>)}>宽限费用</Item>}
-                        {leftDays<-7&&<Item arrow="horizontal" extra={overdue.amount+'元'} onClick={()=>this._showModal('逾期费用',<Text style={{textAlign:'center',flex:1}}>
-                            {infoMessage.overdue}
-                        </Text>)}>逾期费用</Item>}
+                        </Text>)} arrow="horizontal">到期金额</LItem>
+                        {leftDays<0&&<LItem arrow="horizontal" extra={grace.amount+'元'} onClick={()=>this._showModal('宽限费用',<View style={{flex:1}}>
+                            <Text style={{textAlign:'center'}}>{infoMessage.grace}</Text>
+                        </View>)}>宽限费用</LItem>}
+                        {leftDays<-7&&<LItem arrow="horizontal" extra={overdue.amount+'元'} onClick={()=>this._showModal('逾期费用',<View style={{flex:1}}>
+                            <Text style={{textAlign:'center'}}>{infoMessage.overdue}</Text>
+                        </View>)}>逾期费用</LItem>}
                     </List>
                     <View style={styles.edge}></View>
                     <List>
-                        <Item extra={defaultCardNo+'(换卡还款)'} wrap={true} arrow="horizontal" onClick={()=>this.props.navigation.navigate('BankCards')}>还款银行卡</Item>
+                        <LItem extra={defaultCardNo+'(换卡还款)'} wrap={true} arrow="horizontal" onClick={()=>this.props.navigation.navigate('BankCards')}>还款银行卡</LItem>
                     </List>
                     <View style={styles.edge}></View>
                     <List>
-                        <Item arrow="horizontal" onClick={()=>this._showModal('支付宝还款',<Text>
+                        <LItem arrow="horizontal" onClick={()=>this._showModal('支付宝还款',<Text>
                             极速花支付宝账号：<Text style={{color:'#0398ff'}}>service@cashpp.cn</Text>
                             ☆☆注意：请备注好您的姓名和电话，并截图发给小花~
                             花花收到款后24小时之内会更改您的状态，您可再次申请借款。
-                        </Text>)}>其他还款方式</Item>
+                        </Text>)}>其他还款方式</LItem>
                     </List>
-                    <Button  style={{margin:10}} type="primary"  onClick={()=>this._showRepayModal()}>确认还款</Button>
+                    <Button  style={{margin:10}} type="primary"  onClick={()=>this.props.loan.showNowModal = true}>确认还款</Button>
                 </ScrollView>
+                {this.props.loan.showNowModal&&<Modal title="确认还款"
+                                                        transparent={true}
+                                                        maskClosable={false}
+                                                        visible={true}
+                                                        footer={[{
+                                                            text: '取消', onPress: () => {
+                                                                this.props.loan.showNowModal = false;
+                                                            }
+                                                        },{text:'确定',onPress:()=>{
+                                                            this.props.loan.showNowModal = false;
+                                                            this.props.loan.repay(true)
+                                                        },style:{color:'#1AAD19'}}]}
+                >
+                    <Item name="支付金额" subName={(dueAmount+parseFloat(overdueFee))+'元'}  disable={true} first={true}/>
+                    <Item name="还款银行卡" subName={defaultCardNo} disable={true}/>
+                </Modal>}
             </View>
         }
     }
     _showModal(title,desc){
         App.alert(title,desc)
-    }
-    _showRepayModal(){
-
     }
 }
 const styles = StyleSheet.create({

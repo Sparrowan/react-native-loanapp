@@ -102,7 +102,7 @@ class TabCellUnderline extends Component{
             onPress={() => onPressHandler(page)}
         >
             <View style={[stylesUnderline.tab, this.props.tabStyle, ]}>
-                <Text style={[{color: textColor, fontWeight, fontSize: 13 }, textStyle, ]}>
+                <Text style={[{color: textColor, fontWeight, fontSize: 14 }, textStyle, ]}>
                     {name}
                 </Text>
             </View>
@@ -146,7 +146,7 @@ const stylesUnderline = StyleSheet.create({
         justifyContent: 'center'
     },
     tabs: {
-        height: 36,
+        height: 44,
         flexDirection: 'row',
         justifyContent: 'space-around'
     },

@@ -9,10 +9,12 @@ class Loan{
     @observable curCard = null;
     @observable loanRecords = [];
     @observable repayment = { //还款信息
-        fullPay: true, //是否全额
-        day: 7 //借款天数
+        fullPay: false, //是否全额
+        day: '7' //借款天数
     };
     @observable repaymentInfo = null;
+    @observable showDelayModal = false;
+    @observable showNowModal = false;
     async getLoanStatus(end){
         const res = await getLoanStatus();
         if(res.result){
@@ -70,10 +72,21 @@ class Loan{
             this.repaymentInfo = res.result;
         }
     }
-    async repay(){
-        const res = await repayLoan(this.repayment);
+    async repay(fullPay){
+        let data = null;
+        if(fullPay){
+            data = {
+                fullPay:true
+            }
+        }else {
+            data = this.repayment
+        }
+        const res = await repayLoan(data);
         if(res.result&&res.result.call === 'form'){
             app.test(res.result)
+            return true
+        }else {
+            return false
         }
     }
 }

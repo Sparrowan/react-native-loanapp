@@ -1,6 +1,6 @@
 import {observable, action,reaction,runInAction} from 'mobx'
 import {getCardList,applyLoan} from '../service/home/home.service'
-
+import app from '../common/HttpTools'
 class Home{
     @observable cardList = []
     @observable pageInfo = {}
@@ -53,9 +53,9 @@ class Home{
         if(!this.validate()) {
             return;
         }
-        let response =  await applyLoan(this.applyData)
-        if(response.result.msg==='ok'){
-                success()
+        let res =  await applyLoan(this.applyData)
+        if(res.msg==='ok'){
+             success()
         }
     }
     validate() {

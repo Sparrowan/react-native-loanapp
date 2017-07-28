@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import { StyleSheet, Image, View,AppRegistry,Animated,Dimensions,Text} from 'react-native';
+import { StyleSheet, View,Dimensions,Text} from 'react-native';
 import { Button,Popup,Picker} from 'antd-mobile';
 import {IPickerItem,Item} from '../component/index'
 class PopupContent extends Component{
@@ -43,9 +43,9 @@ class PopupContent extends Component{
         </View>
     }
     _apply(){
-        Popup.hide()
         this.props.home.apply(()=>{
-            this.props.navigation.navigate('UserRegister')
+            Popup.hide()
+            this.props.navigation.navigate('UserProfile')
         })
     }
 }

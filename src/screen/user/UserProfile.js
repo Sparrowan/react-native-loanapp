@@ -31,7 +31,7 @@ class UserProfile extends Component {
     componentDidMount(){
         this.props.user.getUserCert().then((needLogin)=>{
             if(needLogin){
-                this.props.navigation.navigate('UserRegister')
+                //this.props.navigation.navigate('UserRegister')
             }
         })
     }
@@ -81,15 +81,24 @@ class UserProfile extends Component {
                     <Item name="身份信息" subName={certArr[0]}  onPress={()=>navigate('avatar')}/>
                     <Item name="个人信息" subName={certArr[1]}  onPress={()=>navigate('Personal')} />
                     <Item name="手机认证" subName={certArr[2]} onPress={()=>navigate('PhoneValidate')}/>
-                    <Item name="立即拿钱" onPress={()=>navigate('LoanApply',{from:'UserProfile'})}/>
+                    <Item name="立即拿钱" onPress={()=>this._gotoApply()}/>
                     <Item name="注册" onPress={()=>navigate('UserRegister')}/>
                 </ScrollView>
                 }
             </View>
         )
     }
+    _gotoApply(){
+        this.props.loan.getLoanStatus().then((res)=>{
+            if(res.loan.status){
+                App.sendMessage('您已有借款,请完成还款后再次申请')
+            }else {
+                this.props.navigation.navigate('LoanApply',{from:'UserProfile'})
+            }
+        })
+    }
 }
-export default inject('user')(observer(UserProfile))
+export default inject('user','loan')(observer(UserProfile))
 const styles = StyleSheet.create({
     title: {
         paddingHorizontal: 16,
