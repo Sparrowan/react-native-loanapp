@@ -42,15 +42,13 @@ class LoanRepaymentNow extends Component{
                     </View>
                     <List>
                         <LItem extra={(dueAmount+parseFloat(overdueFee)+'元')}>应还金额</LItem>
-                        <LItem extra={dueAmount+'元'} onClick={()=>this._showModal('到期金额',<Text style={{textAlign:'center',flex:1}}>
-                            您在到期日应还的金额
-                        </Text>)} arrow="horizontal">到期金额</LItem>
-                        {leftDays<0&&<LItem arrow="horizontal" extra={grace.amount+'元'} onClick={()=>this._showModal('宽限费用',<View style={{flex:1}}>
-                            <Text style={{textAlign:'center'}}>{infoMessage.grace}</Text>
-                        </View>)}>宽限费用</LItem>}
-                        {leftDays<-7&&<LItem arrow="horizontal" extra={overdue.amount+'元'} onClick={()=>this._showModal('逾期费用',<View style={{flex:1}}>
-                            <Text style={{textAlign:'center'}}>{infoMessage.overdue}</Text>
-                        </View>)}>逾期费用</LItem>}
+                        <LItem extra={dueAmount+'元'} onClick={()=>this._showModal('到期金额',<Text style={styles.modalText}>          您在到期日应还的金额</Text>)} arrow="horizontal">到期金额</LItem>
+                        {leftDays<0&&<LItem arrow="horizontal" extra={grace.amount+'元'} onClick={()=>this._showModal('宽限费用',
+                            <Text style={styles.modalText}>{infoMessage.grace}</Text>
+                        )}>宽限费用</LItem>}
+                        {leftDays<-7&&<LItem arrow="horizontal" extra={overdue.amount+'元'} onClick={()=>this._showModal('逾期费用',
+                            <Text style={styles.modalText}>{infoMessage.overdue}</Text>
+                        )}>逾期费用</LItem>}
                     </List>
                     <View style={styles.edge}></View>
                     <List>
@@ -58,8 +56,8 @@ class LoanRepaymentNow extends Component{
                     </List>
                     <View style={styles.edge}></View>
                     <List>
-                        <LItem arrow="horizontal" onClick={()=>this._showModal('支付宝还款',<Text>
-                            极速花支付宝账号：<Text style={{color:'#0398ff'}}>service@cashpp.cn</Text>
+                        <LItem arrow="horizontal" onClick={()=>this._showModal('支付宝还款',<Text style={[styles.modalText,{flexDirection:'row'}]}>
+                            极速花支付宝账号：<Text style={{color:'#0398ff'}} selectable={true}>service@cashpp.cn</Text>
                             ☆☆注意：请备注好您的姓名和电话，并截图发给小花~
                             花花收到款后24小时之内会更改您的状态，您可再次申请借款。
                         </Text>)}>其他还款方式</LItem>
@@ -112,6 +110,14 @@ const styles = StyleSheet.create({
         width:rnScreen.width,
         height:10,
         backgroundColor:'#fafafa'
+    },
+    modalText:{
+        padding:10,
+        width:300,
+        height:75,
+        justifyContent:'center',
+        alignItems:'center',
+        fontSize:16
     }
 })
 export default inject('loan')(observer(LoanRepaymentNow))
