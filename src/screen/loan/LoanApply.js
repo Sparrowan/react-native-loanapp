@@ -14,6 +14,7 @@ class LoanApply extends Component {
             scrollY: new Animated.Value(0),
         }
         this.canNavigate = true
+
         this._showApplyPopup = this._showApplyPopup.bind(this)
     }
 
@@ -80,7 +81,8 @@ class LoanApply extends Component {
 
     _showApplyPopup() {
         Popup.show(<PopupContent {...this.props}/>, {
-            animationType: 'slide-up'
+            animationType: 'slide-up',
+            maskClosable:true
         })
     }
 }

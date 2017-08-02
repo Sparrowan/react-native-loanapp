@@ -43,9 +43,11 @@ class PopupContent extends Component{
         </View>
     }
     _apply(){
-        this.props.home.apply(()=>{
-            Popup.hide()
-            this.props.navigation.navigate('UserProfile')
+        this.props.home.applyStart().then((res)=>{
+            if(res){
+                Popup.hide()
+                this.props.navigation.navigate('UserSetting')
+            }
         })
     }
 }

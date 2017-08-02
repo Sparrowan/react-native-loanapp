@@ -12,6 +12,7 @@ class LoanRepaymentNow extends Component{
     }
     render(){
         const {repaymentInfo} = this.props.loan;
+        const {navigate} = this.props.navigation;
         if(!repaymentInfo){
             return <View style={{flex:1,backgroundColor:'#fafafa'}}>
                 
@@ -74,7 +75,7 @@ class LoanRepaymentNow extends Component{
                                                             }
                                                         },{text:'确定',onPress:()=>{
                                                             this.props.loan.showNowModal = false;
-                                                            this.props.loan.repay(true)
+                                                            this.props.loan.repay(true).then((form)=>form&&navigate('SubmitJsonForm',{form,title:'立即还款'}))
                                                         },style:{color:'#1AAD19'}}]}
                 >
                     <Item name="支付金额" subName={(dueAmount+parseFloat(overdueFee))+'元'}  disable={true} first={true}/>

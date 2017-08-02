@@ -33,7 +33,8 @@ const App = {
         api: BaseUrl,
         version: 1.1, // app 版本号
         debug: 1,
-        expiredTime:2*60*60*1000 //缓存过期时间(毫秒) 目前设定为2小时
+        expiredTime:2*60*60*1000, //缓存过期时间(毫秒) 目前设定为2小时,
+        refreshApi:['/loan/apply/status','/user/info/bindBankCard','user/info/cert'] //存储的是那些不读缓存的借款,比如还款状态接口
     },
 
     serialize: function (obj) {
@@ -187,14 +188,16 @@ const App = {
         let cacheValue = null;
         let readCache = false;
         if(httpMethod==='GET'){
-            cacheValue = await AsyncStorage.getItem(url);
-            if(cacheValue&&cacheValue!==''){
-                const now = Date.now();
-                const recent = JSON.parse(cacheValue).expiredTime
-                if(now-recent<this.config.expiredTime){
-                    readCache = true;
-                }else {
-                    AsyncStorage.setItem(url,'')
+            if(!self.config.refreshApi.includes(url)){ //不刷新的api才走缓存
+                cacheValue = await AsyncStorage.getItem(url);
+                if(cacheValue&&cacheValue!==''){
+                    const now = Date.now();
+                    const recent = JSON.parse(cacheValue).expiredTime
+                    if(now-recent<this.config.expiredTime){
+                        readCache = true;
+                    }else {
+                        AsyncStorage.setItem(url,'')
+                    }
                 }
             }
         }
@@ -225,7 +228,7 @@ const App = {
                             if(res.code != 0){
                                 self.handelErrcode(res);
                             }else {
-                                if(httpMethod==='GET'){ //缓存
+                                if(httpMethod==='GET'&&(!self.config.refreshApi.includes(url))){ //缓存
                                     res['expiredTime'] = Date.now();
                                     AsyncStorage.setItem(url,JSON.stringify(res))
                                 }

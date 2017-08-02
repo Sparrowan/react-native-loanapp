@@ -1,51 +1,47 @@
 import React,{Component} from 'react'
 import {observer} from 'mobx-react'
 import {inject} from '../../store/index'
-import { StyleSheet, Text, View,AppRegistry,Animated,ScrollView} from 'react-native';
-import Item from '../../component/Item'
-import NavBar from '../../component/NavBar'
-import {IPickerItem} from '../../component/IPicker'
-import {Picker} from 'antd-mobile'
-import { district,findCityByIndex} from '../../common/ChinaCity'
-@observer
-@inject('identity')
+import { StyleSheet, Text, View,ScrollView} from 'react-native';
+import {NavBar,Item} from '../../component/'
+import {Button} from 'antd-mobile'
+import app from '../../common/HttpTools'
 class UserSetting extends Component{
-    constructor(props){
-        super(props)
-        this.state = {
-            pickerValue:[]
-        }
-    }
     componentDidMount(){
+
+        this.props.user.getUserCert();
     }
     render(){
-        const {navigate,state,goBack} = this.props.navigation
-        return <View style={{flex: 1, backgroundColor: "#f3f3f3"}}>
-            <NavBar
-                title="设置"
-                leftIcon="angle-left"
-                leftPress={()=>goBack()}
-                rightIcon='apple'
-            />
-            <ScrollView>
-                <Item name="通用" first={true}/>
-                <Item name="关于饿了么" first={true} />
-                <Item.Button name="退出登录" first={true}/>
-                <Item.Button name={findCityByIndex(this.state.pickerValue)} first={true}/>
-                <Picker
-                    data={district}
-                    title="选择地区"
-                    value={this.state.pickerValue}
-                    onChange={v => this.setState({ pickerValue: v })}
-                >
-                    <IPickerItem>居住地址</IPickerItem>
-                </Picker>
-            </ScrollView>
-        </View>
+        const {navigate,goBack} = this.props.navigation
+        const {cert} = this.props.user
+        let certArr = []
+        for(let item in cert){
+            certArr.push(cert[item].text)
+        }
+        return (
+            <View style={{flex: 1, backgroundColor: "#f3f3f3"}}>
+                <NavBar
+                    title="认证中心"
+                    leftIcon="angle-left"
+                    leftIconSize={18}
+                    leftPress={() => goBack()}
+                />
+                    <ScrollView>
+                        <Text style={styles.title}>{"认证信息"}</Text>
+                        <Item name="身份信息" subName={certArr[0]} onPress={() => navigate('avatar')}/>
+                        <Item name="个人信息" subName={certArr[1]} onPress={() => navigate('Personal')}/>
+                        <Item name="手机认证" subName={certArr[2]} onPress={() => navigate('PhoneValidate')}/>
+                        <Button  style={{margin:10}} type="primary"  onClick={()=>{this.props.user.submitUserCert().then((res)=>res&&navigate('Loan'))}}>提交审核</Button>
+                    </ScrollView>
+            </View>
+        )
     }
-}
-export {UserSetting}
-AppRegistry.registerComponent('identity',()=>UserSetting)
-const styles = StyleSheet.create({
 
+}
+export default inject('user')(observer(UserSetting))
+const styles = StyleSheet.create({
+    title: {
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        color: "#666"
+    },
 })

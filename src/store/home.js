@@ -48,15 +48,15 @@ class Home{
             }
         }
     }
-    @action
-    async apply(success){
+    async applyStart(){
         if(!this.validate()) {
-            return;
+            return false
         }
         let res =  await applyLoan(this.applyData)
-        if(res.msg==='ok'){
-             success()
+        if(res.code==='0'){
+             return true;
         }
+        return false;
     }
     validate() {
         if(this.applyData.amount && this.applyData.day) {

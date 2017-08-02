@@ -11,7 +11,7 @@ class UserAddCard extends Component{
         this.props.user.getBankCards();
     }
     render(){
-        const {goBack} = this.props.navigation
+        const {goBack,navigate} = this.props.navigation
         const {cardInfo} = this.props.user
         const {idCard,userName} = cardInfo.userInfo
         return <View style={{flex:1}}>
@@ -35,7 +35,7 @@ class UserAddCard extends Component{
                 </InputItem>
             </List>
             <Button style={{margin:10}} type="primary" onClick={
-                ()=>{this.props.user.addCard().then((res)=>res&&goBack())}
+                ()=>{this.props.user.addCard().then((form)=>form&&navigate('SubmitJsonForm',{form,title:'添加银行卡'}))}
             }>绑定</Button>
         </View>
     }

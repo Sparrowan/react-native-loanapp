@@ -18,7 +18,8 @@ class UserProfile extends Component {
     constructor(props){
         super(props)
         this.state={
-            isLogin:false
+            isLogin:false,
+            curUser:''
         }
     }
     componentWillMount(){
@@ -27,21 +28,10 @@ class UserProfile extends Component {
                 isLogin:res
             })
         })
-    }
-    componentDidMount(){
-        this.props.user.getUserCert().then((needLogin)=>{
-            if(needLogin){
-                //this.props.navigation.navigate('UserRegister')
-            }
-        })
+        App.queryASVal('currentUser').then((res)=>res&&this.setState({curUser:res}))
     }
     render(){
         const {navigate} = this.props.navigation
-        const {cert} = this.props.user
-        let certArr = []
-        for(let item in cert){
-            certArr.push(cert[item].text)
-        }
         return (
             <View style={{flex: 1, backgroundColor: "#f3f3f3"}}>
                 <NavBar
@@ -71,18 +61,16 @@ class UserProfile extends Component {
                     </View>
                 </Image>:
                     <ScrollView>
-                    <Item name="头像" avatar={2} first={true}/>
-                    <Item name="用户名" disable={true} subName="岳生煜"/>
-                    <Item name="我的银行卡" onPress={()=>navigate('BankCards')}/>
-                    <Text style={styles.title}>{"精彩内容"}</Text>
-                    <Item name="关于我们"  icon="mobile" color={'red'} subName="极速花"/>
-                    <Item name="更多产品"  icon="apple"  onPress={()=>{navigate('MoreProducts')}}/>
-                    <Text style={styles.title}>{"安全设置"}</Text>
-                    <Item name="身份信息" subName={certArr[0]}  onPress={()=>navigate('avatar')}/>
-                    <Item name="个人信息" subName={certArr[1]}  onPress={()=>navigate('Personal')} />
-                    <Item name="手机认证" subName={certArr[2]} onPress={()=>navigate('PhoneValidate')}/>
-                    <Item name="立即拿钱" onPress={()=>this._gotoApply()}/>
-                    <Item name="注册" onPress={()=>navigate('UserRegister')}/>
+                        <Item name="头像" avatar={2} first={true}/>
+                        <Item name="用户名" disable={true} subName={this.state.curUser}/>
+                        <Item name="我的银行卡" onPress={() => navigate('BankCards')}/>
+                        <Item name="我的信息" onPress={() => navigate('UserSetting')}/>
+                        <Item name="立即拿钱" onPress={() => this._gotoApply()}/>
+                        <Text style={styles.title}>{"精彩内容"}</Text>
+                        <Item name="关于我们" icon="mobile" color={'red'} subName="极速花"/>
+                        <Item name="更多产品" icon="apple" onPress={() => {
+                            navigate('MoreProducts')
+                        }}/>
                 </ScrollView>
                 }
             </View>
@@ -90,7 +78,8 @@ class UserProfile extends Component {
     }
     _gotoApply(){
         this.props.loan.getLoanStatus().then((res)=>{
-            if(res.loan.status){
+            let status = res.loan.status;
+            if(status&&!['REJECTED',''].includes(status)){
                 App.sendMessage('您已有借款,请完成还款后再次申请')
             }else {
                 this.props.navigation.navigate('LoanApply',{from:'UserProfile'})

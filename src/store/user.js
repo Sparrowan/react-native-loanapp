@@ -1,6 +1,6 @@
 import {observable, action,reaction,runInAction} from 'mobx'
 import {login,getValidateCode,getUserCertStatus,getUserBindBankCard,changeBindCard,addNewBankCard
-        ,getPhoneValidateUrl,
+        ,getPhoneValidateUrl,submitCert
 } from '../service/user/user.base.service'
 import app from '../common/HttpTools'
 class User{
@@ -20,6 +20,7 @@ class User{
     async userLogin(data,callback){
         const result = await login(data);
         if(result.msg === 'ok'){ //登录成功
+            app.setASCache('currentUser',data.phone)
             if(callback){
                 callback()
             }
@@ -51,6 +52,13 @@ class User{
             return true
         }
     }
+    async submitUserCert(){
+        const res = await submitCert();
+        if(res.msg==='ok'){
+            return true;
+        }
+        return false;
+    }
     async getBankCards(){
         const res = await getUserBindBankCard();
         if(res.result){
@@ -67,10 +75,12 @@ class User{
         return false
     }
     async addCard(){
-        app.test(this.newCard)
         const res = await addNewBankCard(this.newCard);
         if(res.msg === 'ok'){
-            return true
+            if(res.result.call==='form'){
+                app.test(res.result)
+                return res.result
+            }
         }
         return false
     }

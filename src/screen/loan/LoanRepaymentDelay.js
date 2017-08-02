@@ -9,6 +9,7 @@ const LItem = List.Item
 class LoanRepaymentDelay extends Component{
     render(){
         const {repaymentInfo} = this.props.loan;
+        const {navigate} = this.props.navigation;
         if(!repaymentInfo){
             return <View style={{flex:1,backgroundColor:'#fafafa'}}>
 
@@ -74,7 +75,7 @@ class LoanRepaymentDelay extends Component{
                                                             }
                                                         },{text:'确定',onPress:()=>{
                                                             this.props.loan.showDelayModal = false;
-                                                            this.props.loan.repay(false)
+                                                            this.props.loan.repay(false).then((form)=>form&&navigate('SubmitJsonForm',{form,title:'延期还款'}))
                                                         },style:{color:'#1AAD19'}}]}
                 >
                     <Item name="支付金额" subName={extensionMoney+'元'} disable={true} first={true}/>

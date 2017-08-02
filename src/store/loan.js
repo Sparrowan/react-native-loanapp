@@ -1,20 +1,21 @@
 import {observable, action,reaction,runInAction} from 'mobx'
-import {getLoanStatus,getLoanRecords,loanApproveNext,getRepaymentInfo,repayLoan} from '../service/home/home.service'
+import {getLoanStatus,getLoanRecords,loanApproveNext,getRepaymentInfo,repayLoan,confirmApply} from '../service/home/home.service'
 import app from '../common/HttpTools'
 class Loan{
-    @observable loan = {
+    @observable loan = { //借款状态
         steps:[],
         activeStepIndex:0
     };
-    @observable curCard = null;
-    @observable loanRecords = [];
+    @observable curCard = null; //用户当前的等级
+    @observable loanRecords = []; //借款记录
     @observable repayment = { //还款信息
         fullPay: false, //是否全额
         day: '7' //借款天数
     };
-    @observable repaymentInfo = null;
-    @observable showDelayModal = false;
-    @observable showNowModal = false;
+    @observable repaymentInfo = null; //还款信息
+    @observable showDelayModal = false; //延期还款弹框
+    @observable showNowModal = false; //立即还款弹框
+    @observable agreementInfo = null; //确认还款信息
     async getLoanStatus(end){
         const res = await getLoanStatus();
         if(res.result){
@@ -48,7 +49,8 @@ class Loan{
     }
     async goNextStep(){
         const res = await loanApproveNext();
-        if(res){
+        if(res&&res.result){
+            this.agreementInfo = {...res.result,readPro:false}
             return true
         }
         return false;
@@ -68,7 +70,6 @@ class Loan{
     async getRepaymentInfo(){
         const res = await getRepaymentInfo();
         if(res.result){
-            app.test(res.result)
             this.repaymentInfo = res.result;
         }
     }
@@ -83,10 +84,19 @@ class Loan{
         }
         const res = await repayLoan(data);
         if(res.result&&res.result.call === 'form'){
-            app.test(res.result)
-            return true
+            return res.result
         }else {
             return false
+        }
+    }
+    async confirmApply(){
+        if(!this.agreementInfo.readPro){
+            app.sendMessage('请阅读并同意服务协议')
+            return false
+        }
+        const res = await confirmApply();
+        if(res&&res.msg==='ok'){
+            return true
         }
     }
 }

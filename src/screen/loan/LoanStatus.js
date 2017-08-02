@@ -44,19 +44,19 @@ class LoanStatus extends Component{
         </View>
     }
     _renderBtn(){
-        const {status} = this.props.loan
+        const {status} = this.props.loan.loan;
         const {navigate}  = this.props.navigation
         let btn = null
         switch (status){
             case 'APPROVED': btn = <Button style={styles.btn} type="primary"  onClick={()=>
                 this.props.loan.goNextStep().then((res)=>{
-                    res&&navigate('BankCards')
+                    res&&navigate('BankCards',{form:'LoanStatus'})
                 })
             } >下一步</Button>;
             break;
             case 'TO_ADJUST':btn = <Button style={styles.btn} type="primary"  onClick={()=>navigate('UserProfile')}>去修改审核信息</Button>
                 break;
-            case 'REJECTED':btn = <Button style={styles.btn} type="primary"  onClick={()=>navigate('LoanApply')}>审核失败</Button>
+            case 'REJECTED':btn = <Button style={styles.btn} type="primary"  onClick={()=>navigate('MoreProducts')}>审核失败</Button>
                 break;
             case 'FUNDED':
             case 'EXTENSION':

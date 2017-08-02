@@ -37,7 +37,11 @@ const repayLoan = function (data) { //还款
         data:data
     })
 }
-
+const confirmApply = function () { //确认借款
+    return post({
+        url:'/loan/apply/sign'
+    })
+}
 export {
-    getCardList,applyLoan,getLoanStatus,getLoanRecords,loanApproveNext,getRepaymentInfo,repayLoan
+    getCardList,applyLoan,getLoanStatus,getLoanRecords,loanApproveNext,getRepaymentInfo,repayLoan,confirmApply
 }

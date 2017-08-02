@@ -31,7 +31,14 @@ class UserBankCards extends Component{
                 </List.Item>
             </List>
             <Button style={{margin:10}} type="primary" onClick={
-                ()=>this.props.user.bindCard().then((res)=>res&&goBack())
+                ()=>this.props.user.bindCard().then((res)=>{
+                    if(res){
+                        let {state,navigate} = this.props.navigation
+                        if(state.params&&state.params.from==='LoanStatus'){
+                            navigate('LoanAgreement')
+                        }
+                    }
+                })
             }>保存</Button>
         </View>
     }
